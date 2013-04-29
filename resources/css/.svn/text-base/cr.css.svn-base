@@ -1,0 +1,23 @@
+@charset "UTF-8";
+/* CSS Document */
+
+
+		.topbar {
+			font-size:30px;
+			background-color:#000;
+			color:#FFF;
+			font-family: Verdana, Geneva, sans-serif;
+			padding: 5 0 0 20;
+		/*	background-image:url(../images/logoallnoaa.jpg); */
+			background-repeat:no-repeat;
+			background-position: right top;
+		}
+		
+		.botbar {
+			font-size:10px;
+			background-color:#000;
+			color:#FFF;
+			font-family: Verdana, Geneva, sans-serif;
+			padding: 10px;
+			text-align: right;
+		}

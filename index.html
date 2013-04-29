@@ -1,63 +1,478 @@
+<!-- saved from url=(0049)http://www.imds.greenlitestaging.com/assess-adapt -->
 
-<html>
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr" class="js activeSlide">
 <head>
-    <title>Map Application</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+  <link rel="shortcut icon" href="http://www.imds.greenlitestaging.com/misc/favicon.ico"
+  type="image/x-icon" />
 
-	<link rel="stylesheet" type="text/css" href="http://serverapi.arcgisonline.com/jsapi/arcgis/2.7/js/dojo/dijit/themes/claro/claro.css"> 
-    <!-- <link rel="stylesheet" type="text/css" href="ext4/resources/css/ext-all.css"> -->
-    <link rel="stylesheet" type="text/css" href="../extjs-4.1.1/resources/css/ext-all.css">
-    <link rel="stylesheet" type="text/css" href="http://serverapi.arcgisonline.com/jsapi/arcgis/2.7/js/esri/dijit/css/Popup.css">
-    <link rel="stylesheet" type="text/css" href="resources/css/cr.css">
-    
-    <style type="text/css">
+  <title>Assess &amp; Adapt | The Nature Conservancy IMDS Project</title>
+  
+  	<link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/dojo/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/esri/css/esri.css">
+    <link rel="stylesheet" href="resources/css/cr.css">
+
+  <style type="text/css" media="all">
+
+/*<![CDATA[*/
+  @import "http://www.imds.greenlitestaging.com/modules/node/node.css?C";
+  @import "http://www.imds.greenlitestaging.com/modules/system/defaults.css?C";
+  @import "http://www.imds.greenlitestaging.com/modules/system/system.css?C";
+  @import "http://www.imds.greenlitestaging.com/modules/system/system-menus.css?C";
+  @import "http://www.imds.greenlitestaging.com/modules/user/user.css?C";
+  @import "http://www.imds.greenlitestaging.com/sites/all/modules/accordion_blocks/accordion_init.css?C";
+  @import "http://www.imds.greenlitestaging.com/sites/all/modules/cck/theme/content-module.css?C";
+  @import "http://www.imds.greenlitestaging.com/sites/all/modules/ctools/css/ctools.css?C";
+  @import "http://www.imds.greenlitestaging.com/sites/all/modules/date/date.css?C";
+  @import "http://www.imds.greenlitestaging.com/sites/all/modules/date/date_popup/themes/datepicker.css?C";
+  @import "http://www.imds.greenlitestaging.com/sites/all/modules/date/date_popup/themes/jquery.timeentry.css?C";
+  @import "http://www.imds.greenlitestaging.com/sites/all/modules/filefield/filefield.css?C";
+  @import "http://www.imds.greenlitestaging.com/sites/all/modules/footnotes/footnotes.css?C";
+  @import "http://www.imds.greenlitestaging.com/sites/all/modules/gmaps/misc/gmaps.css?C";
+  @import "http://www.imds.greenlitestaging.com/sites/all/modules/lightbox2/css/lightbox.css?C";
+  @import "http://www.imds.greenlitestaging.com/sites/all/modules/panels/css/panels.css?C";
+  @import "http://www.imds.greenlitestaging.com/sites/all/modules/tableofcontents/tableofcontents.css?C";
+  @import "http://www.imds.greenlitestaging.com/sites/all/modules/views_slideshow/contrib/views_slideshow_singleframe/views_slideshow.css?C";
+  @import "http://www.imds.greenlitestaging.com/sites/all/modules/extlink/extlink.css?C";
+  @import "http://www.imds.greenlitestaging.com/sites/all/modules/cck/modules/fieldgroup/fieldgroup.css?C";
+  @import "http://www.imds.greenlitestaging.com/sites/all/modules/views/css/views.css?C";
+  @import "http://www.imds.greenlitestaging.com/sites/all/modules/tablefield/tablefield.css?C";
+  @import "http://www.imds.greenlitestaging.com/sites/all/modules/taxonomy_super_select/taxonomy_super_select.css?C";
+  @import "http://www.imds.greenlitestaging.com/sites/all/themes/tnc/reset.css?C";
+  @import "http://www.imds.greenlitestaging.com/sites/all/themes/tnc/style.css?C";
+  /*]]>*/
+  </style>
+  
+  <!--
+  <script type="text/javascript" src=
+       "./index_files/js_0a30cd69cea8ef3a883ffe35319290ff.js">
+  </script> 
+  <script type="text/javascript">
+<!--//<![CDATA[//><!--
+  jQuery.extend(Drupal.settings, { "basePath": "/", "lightbox2": { "rtl": 0, "file_path": "/(\\w\\w/)sites/default/files", "default_image": "/sites/all/modules/lightbox2/images/brokenimage.jpg", "border_size": 10, "font_color": "000", "box_color": "fff", "top_position": "", "overlay_opacity": "0.8", "overlay_color": "000", "disable_close_click": 1, "resize_sequence": 0, "resize_speed": 400, "fade_in_speed": 400, "slide_down_speed": 600, "use_alt_layout": 0, "disable_resize": 0, "disable_zoom": 0, "force_show_nav": 1, "show_caption": 1, "loop_items": 0, "node_link_text": "View Image Details", "node_link_target": 0, "image_count": "Image !current of !total", "video_count": "Video !current of !total", "page_count": "Page !current of !total", "lite_press_x_close": "press \x3ca href=\"#\" onclick=\"hideLightbox(); return FALSE;\"\x3e\x3ckbd\x3ex\x3c/kbd\x3e\x3c/a\x3e to close", "download_link_text": "", "enable_login": false, "enable_contact": false, "keys_close": "c x 27", "keys_previous": "p 37", "keys_next": "n 39", "keys_zoom": "z", "keys_play_pause": "32", "display_image_size": "original", "image_node_sizes": "()", "trigger_lightbox_classes": "", "trigger_lightbox_group_classes": "", "trigger_slideshow_classes": "", "trigger_lightframe_classes": "", "trigger_lightframe_group_classes": "", "custom_class_handler": 0, "custom_trigger_classes": "", "disable_for_gallery_lists": true, "disable_for_acidfree_gallery_lists": true, "enable_acidfree_videos": true, "slideshow_interval": 5000, "slideshow_automatic_start": true, "slideshow_automatic_exit": true, "show_play_pause": true, "pause_on_next_click": false, "pause_on_previous_click": true, "loop_slides": false, "iframe_width": 600, "iframe_height": 400, "iframe_border": 1, "enable_video": 0 }, "no_colons": { "no_colons_mode": "all_colons", "no_colons_use_cck_jquery": { "cck_jquery": "cck_jquery" }, "no_colons_use_views_jquery": { "views_jquery": 0 } }, "extlink": { "extTarget": "_blank", "extClass": "ext", "extSubdomains": 1, "extExclude": "", "extInclude": "", "extAlert": 0, "extAlertText": "This link will take you to an external web site. We are not responsible for their content.", "mailtoClass": "mailto" }, "viewsSlideshowSingleFrame": { "#views_slideshow_singleframe_main_landing_page_rotator-block_1": { "num_divs": 8, "id_prefix": "#views_slideshow_singleframe_main_", "div_prefix": "#views_slideshow_singleframe_div_", "vss_id": "landing_page_rotator-block_1", "timeout": 5000, "sort": 1, "effect": "fade", "speed": 700, "start_paused": 0, "delay": 0, "fixed_height": 1, "random": 0, "pause": 2, "pause_on_click": 0, "pause_when_hidden": 0, "pause_when_hidden_type": "full", "amount_allowed_visible": "", "remember_slide": 0, "remember_slide_days": 1, "controls": 0, "items_per_slide": 1, "pager": 0, "pager_type": "Numbered", "pager_hover": 2, "pager_click_to_page": 0, "image_count": 0, "nowrap": 0, "sync": 1, "advanced": "", "ie": { "cleartype": "true", "cleartypenobg": "false" } } } });
+  //--><!]]>
+  </script><!--[if IE]>
+                <link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/tnc/ie.css" />       <![endif]-->
+  <!-- Code added by JP on 7/14/11 due to Mapstraction map not loading when editing nodes 
+
+  <script src="./index_files/maps" type="text/javascript">
+</script>
+  <script src="./index_files/main.js" type="text/javascript">
+</script>
+  <style type="text/css">
+/*<![CDATA[*/
+  @media print{.gmnoprint{display:none}}@media screen{.gmnoscreen{display:none}}
+  /*]]>*/
+  </style>
+  
+  
+  
+  
+  <script type="text/javascript" src="./index_files/js">
+</script>
+  <script src="./index_files/main(1).js" type="text/javascript">
+</script>
+  <script type="text/javascript" src="./index_files/geo.js">
+</script>
+  <script type="text/javascript" src="./index_files/functions.js">
+</script><!-- Google Fonts -->
+
+
+  <link href='http://fonts.googleapis.com/css?family=Merriweather' rel='stylesheet' type='text/css' />
+  <link href='http://fonts.googleapis.com/css?family=Merriweather:700' rel='stylesheet' type='text/css' />
+  <link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Mako' rel='stylesheet' type='text/css'>
+  <script type="text/javascript">
+//<![CDATA[
+        function changefield(){
+                document.getElementById("edit-pass-wrapper").innerHTML = '<input id="edit-pass" type="password" name="pass" title="Password" tabindex="2" />';
+                
+                setTimeout(function() { 
+                        document.getElementById("edit-pass").focus();
+                }, 100);
+        }
+  //]]>
+  </script>
+  
 <!--
+  <script type="text/javascript" charset="UTF-8" src=
+  "./index_files/{common,util,stats}.js">
+</script>
+-->
 
-	.grouplayer .x-tree-icon {
-		background-image:url(resources/images/layers.png);
-    }
-	
-	.layer .x-tree-icon {
-		background-image:url(resources/images/layer.png);
-    }
-	
-	.service .x-tree-icon {
-		background-image:url(resources/images/gear.png);
+
+    
+    <!-- <link rel="stylesheet" type="text/css" href="http://extjs-public.googlecode.com/svn/tags/extjs-4.1.1a/release/resources/css/ext-all.css"> -->
+
+   
+
+ 
+  
+    <script type="text/javascript">
+    
+    var locationstring = window.location.href;
+// replace() the trailing / with nothing, split on the remaining /, and pop off the last one
+	var result = /\/([^\/]*)$/.exec(locationstring)[1];
+
+    indy = window.location.href.indexOf(result)
+    
+    if (indy > 0) {
+    	apploc = window.location.href.slice(0,indy);
+    } else {
+	    
+	    apploc = window.location.href
     }
     
-    .esriPopup.myTheme .titlePane,
-      .dj_ie7 .esriPopup.myTheme .titlePane .title {
-        background-color: #a2b5f3;
-        color: #333333;
-        font-weight: bold;
-      }
-      .esriPopup.myTheme .titlePane {
-        border-bottom: 1px solid #121310;
-      }
-      .esriPopup.myTheme a {
-        color: #FFF;
-        text-decoration: none;
-      }
-      .esriPopup.myTheme .titleButton,
-      .esriPopup.myTheme .pointer,
-      .esriPopup.myTheme .outerPointer,
-      .esriPopup.myTheme .esriViewPopup .gallery .mediaHandle,
-      .esriPopup.myTheme .esriViewPopup .gallery .mediaIcon {
-       background-image: url("http://serverapi.arcgisonline.com/jsapi/arcgis/3.2/js/esri/dijit/images/popup.png");
-      }
-      .esriPopup.myTheme .contentPane,
-      .esriPopup.myTheme .actionsPane {
-        border-color: 1px solid #10110e;
-        background-color: #ffffff;
-        color:#000000;
-     }
+    //apploc = window.location.href.split("#")[0]
+    var dojoConfig = {
+    async: 1,
+    cacheBust: 1,
+    parseOnLoad: true,
+    packages: [
+        { name: "imds", location: apploc + "/imds"}
+    ]
+    };
+    </script>
 
--->
-</style>
 
-	<script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.7"></script>
-    <!-- <script type="text/javascript" src="ext4/ext-all-debug.js"></script> -->
-	<script type="text/javascript" src="../extjs-4.1.1/ext-all-debug.js"></script>
-    <script type="text/javascript" src="oapp.js"></script>
+	<script src="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/"></script>
+	
+	<script type="text/javascript" src="http://extjs-public.googlecode.com/svn/tags/extjs-4.1.1a/release/ext-all-debug.js"></script>
+
+	<script type="text/javascript">
+
+	
+//dojo.require("");
+//dojo.require("esri.dijit.Legend");
+//dojo.require("esri.virtualearth.VETiledLayer");
+//dojo.require("esri.layers.osm");
+//dojo.require("esri.layers.FeatureLayer");
+//dojo.require("esri.tasks.gp");
+//dojo.require("dijit.Dialog");
+
+      var map;
+      
+      var readycount = 0;      
+      
+      require([
+                "esri/map",
+                "esri/layers/FeatureLayer",
+                "esri/dijit/Legend",
+				"dojo/parser",
+                "dojo/dom",
+        		"imds/prtrack"
+            ], function (
+                esrimap,
+                esriFeatureLayer,
+                esriLegend,
+				parser,				
+                dom, 
+            	prtrack
+            ) {
+            
+            
+         function init() {
+      
+        var map = new esri.Map("map",{
+          basemap:"topo",
+          center:[-85,45], //long, lat
+          zoom:5,
+          //nav:true,
+          sliderStyle:"small"
+        });
+        
+        dojo.connect(map, "onLoad", function() {
+	        //map.showPanArrows();
+	        map.enablePan();
+	        
+	        map.reposition()
+	        map.resize()
+	        });
+        
+        
+	     
+	    sarea = dom.byId("controls");
+        var widget = new prtrack({"name":"George",map:map, outputid:'statarea'}).placeAt(sarea);
+        widget.startup();
+        
+	     }
+
+
+      
+      function appready() {
+      
+      readycount = readycount + 1
+	    
+	    if (readycount == 2) {init()}
+      }
+
+      dojo.addOnLoad(appready);
+      
+      Ext.onReady(appready); 
+      
+
+             }
+             
+             
+             );
+	           
+      
+    </script>
+
+
+
 </head>
-<body class="claro"></body>
+
+<body id="top" class="lightbox-processed claro">
+  <div id="header">
+    <div class="inner_container">
+      <div id="logo">
+        <h1><a href="http://www.imds.greenlitestaging.com/" title=
+        "Sharing data and knowledge to facilitate strategic conservation"><img src=
+        "./index_files/logo.png" alt=
+        "The Nature Conservancy IMDS Project" /></a></h1>
+
+        <div class="mission_statement">
+          <div id="block-block-5" class="clear-block block block-block">
+            <div class="content">
+              <p>Advancing shared goals and collaborative solutions<br /> to complex conservation
+              problems facing the Great Lakes region</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ul id="header-menu">
+        <li><a href="http://www.imds.greenlitestaging.com/">Home</a> |&nbsp;</li>
+
+        <li><a href="http://www.imds.greenlitestaging.com/sitemap">Sitemap</a>
+        |&nbsp;</li>
+
+        <li><a href="http://www.imds.greenlitestaging.com/contact-us">Contact Us
+        |&nbsp;</a></li>
+
+        <li><a href="http://www.imds.greenlitestaging.com/about-us">About Us</a></li>
+      </ul>
+
+      <form method="post" accept-charset="UTF-8" action=
+      "http://www.imds.greenlitestaging.com/user/login">
+        <ul id="header-login">
+          <li>
+            <div class="form-item" id="edit-name-wrapper">
+              <input type="text" maxlength="60" name="name" id="edit-name" size="60"
+              value="Username" tabindex="1" onfocus=
+              "if(this.value == 'Username') { this.value = ''; }" class=
+              "form-text required" />
+            </div>
+          </li>
+
+          <li>
+            <div class="form-item" id="edit-pass-wrapper">
+              <input type="text" maxlength="128" name="pass" id="edit-pass" size="60"
+              value="Password" tabindex="2" onfocus="changefield();" class=
+              "form-text required" />
+            </div>
+          </li>
+        </ul><input type="hidden" name="form_id" id="edit-user-login" value=
+        "user_login" /><input type="hidden" name="form_build_id" id=
+        "form-6bafc067fbd92dd8da82f50c03df1c1b" value=
+        "form-6bafc067fbd92dd8da82f50c03df1c1b" /><input type="submit" name="op" id=
+        "edit-submit-1" value="Log in" tabindex="3" style=
+        "position: absolute; left: -9999px; width: 1px; height: 1px;" class=
+        "form-submit" />
+      </form>
+    </div><!-- /inner_container -->
+  </div><!-- /header -->
+
+  <div id="main_nav">
+    <div class="inner_container">
+      <ul class="links primary-links">
+        <li class="menu-8985 first"><a href=
+        "http://www.imds.greenlitestaging.com/knowledge-network" title=
+        "Sharing Knowledge to Increase Understanding">Knowledge Network</a></li>
+
+        <li class="menu-8990"><a href="http://www.imds.greenlitestaging.com/data-catalog"
+        title="Sharing Data to Advance Knowledge">Data Catalog</a></li>
+
+        <li class="menu-8986"><a href="http://www.imds.greenlitestaging.com/dynamic-maps"
+        title="Sharing Interactive Maps to Provide a Sense of Place">Dynamic
+        Maps</a></li>
+
+        <li class="menu-8991"><a href=
+        "http://www.imds.greenlitestaging.com/decision-tools" title=
+        "Sharing Models and Decision Tools to Address Complex Problems">Decision
+        Tools</a></li>
+
+        <li class="menu-8992 last"><a href=
+        "http://www.imds.greenlitestaging.com/assess-adapt" title=
+        "Sharing Goals to Foster Shared Solutions" class="active">Assess &amp;
+        Adapt</a></li>
+
+        <li class="menu-8993 active-trail active"><a href=
+        "http://www.imds.greenlitestaging.com/project-tracking" title=
+        "Sharing Ideas to Facilitate and Coordinate Conservation">Project
+        Tracking</a></li>
+      </ul>
+    </div>
+  </div>
+
+ 
+  <div id="container" class="sub_container">
+
+   <div id="content-container">
+      
+      <div class="breadcrumb">You are here: <a href="http://imds.greenlitestaging.com">Home</a> > <a href="http://imds.greenlitestaging.com/project-tracking">Project Tracking</a> > Search Projects by Geographic Area</div>
+
+      <div class="clear"></div>
+
+      <div id="content">
+        <h2 class="main_title">Search Projects by Geographic Area</h2>
+
+        <div class="clear-block">
+          <div class="main_content">
+            <div id="node-584" class="node">
+              <div class="content clear-block"></div>
+              	<div id="controls"></div>
+				<div id="map" style='width:910px;height:500px;border-style:solid;border-width:1px;z-index:10000;' class="claro"> </div>
+                <div id="statarea"> </div>
+                <div class="meta"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> <!--   /content /content-container -->
+
+    <div class="clear"></div>
+  </div><!-- /container -->
+  
+
+ </div>
+
+  <div id="footer">
+    <div id="footer-container">
+      <div id="modules">
+        <h2>Modules</h2>
+
+        <ul>
+          <li><a href="http://www.imds.greenlitestaging.com/knowledge-network" id=
+          "kn">Knowledge Network</a></li>
+
+          <li><a href="http://www.imds.greenlitestaging.com/data-catalog" id="dc">Data
+          Catalog</a></li>
+
+          <li><a href="http://www.imds.greenlitestaging.com/project-tracking" id=
+          "pt">Project Tracking</a></li>
+
+          <li><a href="http://www.imds.greenlitestaging.com/dynamic-maps" id="dm">Dynamic
+          Maps</a></li>
+
+          <li><a href="http://www.imds.greenlitestaging.com/decision-tools" id=
+          "dt">Decision Tools</a></li>
+
+          <li><a href="./index_files/assess_adapt.htm" id="aa">Assess &amp;
+          Adapt</a></li>
+        </ul>
+      </div>
+
+      <div id="utilities">
+        <div id="block-menu_block-2" class="clear-block block block-menu_block">
+          <h2>Utilities</h2>
+
+          <div class="content">
+            <div class=
+            "menu-block-2 menu-name-menu-footer-utilities parent-mlid-0 menu-level-1">
+              <ul class="menu">
+                <li class="leaf first menu-mlid-6430"><a href=
+                "http://www.imds.greenlitestaging.com/contact-us" title="">Contact
+                Us</a></li>
+
+                <li class="leaf menu-mlid-6429"><a href=
+                "http://www.imds.greenlitestaging.com/" title="">Home</a></li>
+
+                <li class="leaf menu-mlid-6428"><a href=
+                "http://www.imds.greenlitestaging.com/user" title=
+                "">Login/Profile</a></li>
+
+                <li class="leaf menu-mlid-6427"><a href=
+                "http://www.imds.greenlitestaging.com/sitemap" title="">Sitemap</a></li>
+
+                <li class="leaf last menu-mlid-6420"><a href=
+                "http://www.imds.greenlitestaging.com/assess-adapt#top" title="">Top of
+                Page</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="artemis-logo">
+        <a href="http://www.artemis-solutions.com/" target="_blank"><img src=
+        "./index_files/artemis-logo.png" /></a>
+      </div>
+
+      <div class="clear"></div>
+    </div>
+  </div>
+
+  <div id="lightbox2-overlay" style="display: none;"></div>
+
+  <div id="lightbox" style="display: none;" class="lightbox2-orig-layout">
+    <div id="outerImageContainer" style=
+    "background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);">
+      <div id="modalContainer" style="display: none; padding: 10px;"></div>
+
+      <div id="frameContainer" style="display: none; padding: 10px;"></div>
+
+      <div id="imageContainer" style="display: none; padding: 10px;">
+        <img id="lightboxImage" alt="" />
+
+        <div id="hoverNav">
+          <a id="prevLink" title="Previous" href=
+          "http://www.imds.greenlitestaging.com/assess-adapt#" style="padding-top: 10px;"
+          class="force_show_nav"></a><a id="nextLink" title="Next" href=
+          "http://www.imds.greenlitestaging.com/assess-adapt#" style="padding-top: 10px;"
+          class="force_show_nav"></a>
+        </div>
+      </div>
+
+      <div id="loading">
+        <a href="http://www.imds.greenlitestaging.com/assess-adapt#" id=
+        "loadingLink"></a>
+      </div>
+    </div>
+
+    <div id="imageDataContainer" class="clearfix" style=
+    "background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);">
+      <div id="imageData">
+        <div id="imageDetails">
+          <span id="caption"></span><span id="numberDisplay"></span>
+        </div>
+
+        <div id="bottomNav">
+          <div id="frameHoverNav">
+            <a id="framePrevLink" title="Previous" href=
+            "http://www.imds.greenlitestaging.com/assess-adapt#" style=
+            "padding-top: 10px;"></a><a id="frameNextLink" title="Next" href=
+            "http://www.imds.greenlitestaging.com/assess-adapt#" style=
+            "padding-top: 10px;"></a>
+          </div><a id="bottomNavClose" title="Close" href=
+          "http://www.imds.greenlitestaging.com/assess-adapt#" style=
+          "background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);"></a><a id=
+          "bottomNavZoom" href=
+          "http://www.imds.greenlitestaging.com/assess-adapt#"></a><a id=
+          "bottomNavZoomOut" href=
+          "http://www.imds.greenlitestaging.com/assess-adapt#"></a><a id="lightshowPause"
+          title="Pause Slideshow" href=
+          "http://www.imds.greenlitestaging.com/assess-adapt#" style=
+          "display: none;"></a><a id="lightshowPlay" title="Play Slideshow" href=
+          "http://www.imds.greenlitestaging.com/assess-adapt#" style=
+          "display: none;"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
 </html>
