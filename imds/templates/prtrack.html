@@ -1,7 +1,12 @@
 <div>
 
 <span style="color:black" id="LSelect">Select Geographic Extent: </span> &nbsp; &nbsp; &nbsp;
-<span id="Cselect">  </span><br><i><span style="color:darkred">Click on any watershed to restrict the search to that area.  Choose additional selections from the dropdown menus below.  The information about your selections will display below the map. </span></i>
+<span id="Cselect">  </span>
+ &nbsp; &nbsp;
+<button data-dojo-type="dijit/form/Button" type="button">Help
+</button>
+
+<br><i><span style="color:darkred">Click on any watershed to restrict the search to that area.  Choose additional selections from the dropdown menus below.  The information about your selections will display below the map. </span></i>
 <br>
 
 <span style="color:black" id="taxaSelect">
@@ -9,20 +14,141 @@
 
 <div data-dojo-type="dijit/form/DropDownButton">
   <span>Status</span>
-  <div data-dojo-type="dijit/DropDownMenu"  style="display: none;" >
-	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '75'">Completed</div>
-	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '76'">In Progress (Funded)</div>
-	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '77'">In Progress (Needs Funding)</div>
-	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '78'">Proposed</div>
-	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '79'">Conceptual</div>
+  <div data-dojo-type="dijit/DropDownMenu"  style="display: none;" data-dojo-props="text:'Status', tid:''">
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '75'">Completed</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '76'">In Progress (Funded)</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '77'">In Progress (Needs Funding)</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '78'">Proposed</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '79'">Conceptual</div>
 	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Between</b> Group Logic: AND (Click to Switch)</div>
 	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Within</b> Group Logic: OR (Click to Switch)</div>
   </div>
 </div>
 
+<div data-dojo-type="dijit/form/DropDownButton">
+  <span>Area of Interest</span>
+  <div data-dojo-type="dijit/DropDownMenu"  style="display: none;" data-dojo-props="text:'Area of Interest', tid:'5'">
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '68'">Land</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '69'">Urban</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '70'">Rural</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '71'">Water</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '72'">Groundwater</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '73'">Surface Water</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '74'">Air/Atmosphere/Climate</div>
+	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Between</b> Group Logic: AND (Click to Switch)</div>
+	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Within</b> Group Logic: OR (Click to Switch)</div>
+  </div>
+</div>
+
+<div data-dojo-type="dijit/form/DropDownButton">
+  <span>Ecosystems</span>
+  <div data-dojo-type="dijit/DropDownMenu"  style="display: none;" data-dojo-props="text:'Ecosystems', tid:''">
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '83'">Inland Aquatic</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '106'">Watershed</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '8'">Coastal</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '105'">Riparian</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '7'">Cave</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '6'">Island</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '12'">Groundwater Springs / Seeps / Fens</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '87'">Benthic</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '86'">Pelagic / Open Water</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '11'">Lakes and Ponds</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '5'">Grassland</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '10'">Wetlands</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '4'">Savanna</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '85'">Nearshore / Littoral</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '1'">Terrestrial</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '9'">Rivers</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '3'">Forest</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '84'">Embayments</div>
+	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Between</b> Group Logic: AND (Click to Switch)</div>
+	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Within</b> Group Logic: OR (Click to Switch)</div>
+  </div>
+</div>
+
+<div data-dojo-type="dijit/form/DropDownButton">
+  <span>Human Activities</span>
+  <div data-dojo-type="dijit/DropDownMenu"  style="display: none;" data-dojo-props="text:'Human Activities', tid:'3'">
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '107'">Land Use/Land Change</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '56'">Invasive Species</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '55'">Recreation/Tourism</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '54'">Biological Resource Use</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '53'">Hydrogeomorphic Modifications</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '52'">Fire Supression</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '51'">Waste or Pollution</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '50'">Transportation</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '49'">Mining</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '48'">Energy Production</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '47'">Agriculture</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '46'">Rural Development</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '45'">Urban Development</div>
+	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Between</b> Group Logic: AND (Click to Switch)</div>
+	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Within</b> Group Logic: OR (Click to Switch)</div>
+  </div>
+</div>
+
+<div data-dojo-type="dijit/form/DropDownButton">
+  <span>Ecological Attribs.</span>
+  <div data-dojo-type="dijit/DropDownMenu"  style="display: none;" data-dojo-props="text:'Ecological Attribs', tid:'2'">
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '41'">Ecosystem Function or Process</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '44'">Natural Disturbance Regimes</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '40'">Chemical and Physical Factors</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '43'">Hydrology and Geomorphology</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '39'">Biotic Condition</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '38'">Landscape Condition</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '42'">Energy, Matter, and Nutrient Flow</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '202'">Ecosystem Structure or Pattern</div>
+	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Between</b> Group Logic: AND (Click to Switch)</div>
+	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Within</b> Group Logic: OR (Click to Switch)</div>
+  </div>
+</div>
+
+<div data-dojo-type="dijit/form/DropDownButton">
+  <span>Taxa</span>
+  <div data-dojo-type="dijit/DropDownMenu"  style="display: none;" data-dojo-props="text:'Taxa', tid:'1'">
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '26'">Animals</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '37'">Mammals</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '36'">Birds</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '35'">Amphibians</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '34'">Reptiles</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '33'">Fish</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '22'">Aquatic Plants</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '21'">Bryophytes (Mosses, Liverworts, Hornworts)</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '22'">Ferns and Clubmosses</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '30'">Terrestrial Invertebrates</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '17'">Herbs</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '16'">Vines</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '29'">Aquatic Invertebrates</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '24'">Submergent</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '15'">Shrubs</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '28'">Insects and Macroinvertebrates</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '19'">Forbs</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '27'">Zooplankton</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '14'">Trees</div>
+	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Between</b> Group Logic: AND (Click to Switch)</div>
+	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Within</b> Group Logic: OR (Click to Switch)</div>
+  </div>
+</div>
+
+<div data-dojo-type="dijit/form/DropDownButton">
+  <span>Conservation Strategies</span>
+  <div data-dojo-type="dijit/DropDownMenu"  style="display: none;" data-dojo-props="text:'Conservation Strategies', tid:'4'">
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '60'">Species Management</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '58'">Protection</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '63'">Legal Policies</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '59'">Land/Water Management</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '61'">Education/Awareness</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '64'">Economic Incentives</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '62'">Administrative Policies</div>
+	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Between</b> Group Logic: AND (Click to Switch)</div>
+	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Within</b> Group Logic: OR (Click to Switch)</div>
+  </div>
+</div>
 
 </span>    
 
+<br>
+<br>
 
 
 </div>

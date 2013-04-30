@@ -1,7 +1,7 @@
 //, summarizebyunit
 
-define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo/text!./templates/prtrack.html", "dojo/dom-style", "dojo/dom-class", "dojo/_base/fx", "dojo/_base/lang", "dojo/on", "dojo/mouse", "dojo/query", "dojo/store/Memory", "dijit/form/ComboBox", "dijit/form/DropDownButton", "dijit/DropDownMenu", "dijit/MenuItem", "dojo/dom", "dojo/parser", "dijit/layout/TabContainer", "dijit/layout/ContentPane", "dojo/dom-construct", "dijit/form/Button", "dijit/CheckedMenuItem"],
-    function(declare, WidgetBase, TemplatedMixin, template, domStyle, domClass, baseFx, lang, on, mouse, query, Memory, ComboBox, DropDownButton, DropDownMenu, MenuItem, dom, parser, TabContainer, ContentPane, domConstruct, Button, CheckedMenuItem){
+define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo/text!./templates/prtrack.html", "dojo/dom-style", "dojo/dom-class", "dojo/_base/fx", "dojo/_base/lang", "dojo/on", "dojo/mouse", "dojo/query", "dojo/store/Memory", "dijit/form/ComboBox", "dijit/form/DropDownButton", "dijit/DropDownMenu", "dijit/MenuItem", "dojo/dom", "dojo/parser", "dojo/query", "dijit/registry", "dijit/layout/TabContainer", "dijit/layout/ContentPane", "dojo/dom-construct", "dijit/form/Button", "dijit/CheckedMenuItem", "dojo/_base/array"],
+    function(declare, WidgetBase, TemplatedMixin, template, domStyle, domClass, baseFx, lang, on, mouse, query, Memory, ComboBox, DropDownButton, DropDownMenu, MenuItem, dom, parser, dq, registry, TabContainer, ContentPane, domConstruct, Button, CheckedMenuItem, array){
         return declare([WidgetBase, TemplatedMixin], {
             // Some default values for our author
             // These typically map to whatever you're handing into the constructor
@@ -93,8 +93,15 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 	             
 				 
 				 
-		
-		
+		 allchecks = dq(".taxaCheck");
+		 
+		 array.forEach(allchecks, lang.hitch(this,function(entry, i) {
+				mywidget = registry.byNode(entry);
+				a = mywidget.get("value");
+				on(mywidget, "change", lang.hitch(this,this.restrictGeography));
+			}));
+		 
+		 
 			 this.map.reposition();
 			 
 			 this.inherited(arguments);
@@ -150,12 +157,48 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 			 //this.tool = new this.tooltype({"name":"George",map:this.map});
 			 //this.tool.placeAt(this.domNode);
 		     //this.tool.startup();
-		     
+		
+		popup = new esri.dijit.Popup({
+          fillSymbol: new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([255,0,0]), 2), new dojo.Color([255,100,0,0.25]))
+        }, dojo.create("div"));
+       
+       dojo.addClass(this.map.infoWindow.domNode, "myTheme");
+		
+		popupTemplate = new esri.dijit.PopupTemplate({
+          title: "<br>{title}",
+          description: "<img src='{photo}' width=220/><br>{desc}<br><br><a href='http://imds.greenlitestaging.com/project-tracking/{nid}' target='_blank' >Click For More Info</a>",
+          showAttachments:false
+        });
+        
+        this.map.infoWindow = popup;
+		
+        //create a feature layer based on the feature collection
+        this.featureLayer = new esri.layers.FeatureLayer("http://tnc.usm.edu/ArcGIS/rest/services/IMDS/ProjectTracking/MapServer/0",{
+	        mode: esri.layers.FeatureLayer.MODE_SELECTION,
+	        infoTemplate: popupTemplate,//new esri.InfoTemplate("<br><a href='http://tnc.greenlitestaging.com/project-tracking/${nid}' target='_blank' >${title}</a>","${body}"),
+	        outFields: ["*"]
+	       });
+
+		this.map.addLayers([this.featureLayer]);
+		
+		query = new esri.tasks.Query();
+		query.where = "OBJECTID > -1";
+		this.featureLayer.selectFeatures(query,esri.layers.FeatureLayer.SELECTION_NEW, function(f,sm) {thing.selcomplete(f,sm,thing)});
 			 
 		   },
 		   
 		  restrictGeography: function() {
-				alert('')
+
+				checkers = dq(".taxaCheck");
+		 
+				array.forEach(checkers, lang.hitch(this,function(entry, index) {
+					citem = registry.byNode(entry);
+					a = citem.get("value");
+					cmen = dijit.getEnclosingWidget(entry.parentNode);
+					if (citem.checked == true) {
+							alert(cmen);
+					};
+				}));
 		  
 		  },
 		   
