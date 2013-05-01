@@ -191,14 +191,68 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 
 				checkers = dq(".taxaCheck");
 		 
+		 		outs = {}
+		
+				rellink =[]
+				
 				array.forEach(checkers, lang.hitch(this,function(entry, index) {
 					citem = registry.byNode(entry);
-					a = citem.get("value");
 					cmen = dijit.getEnclosingWidget(entry.parentNode);
 					if (citem.checked == true) {
-							alert(cmen);
+							cc = citem.get("text");
+							ctid = citem.get("tid");
+							a = citem.get("value");
+							knart = citem.get("knaid");
+
+							if (knart != undefined) {
+								knartvals[knart] = citem.text;
+							}
+							
+							if (ctid != undefined) {
+								
+								if (ctid == "") {
+								
+								rellink.push("term_node_tid_depth%5B%5D=" + citem.value)
+								
+								} else {
+								
+								rellink.push("term_node_tid_depth_" + ctid + "%5B%5D=" + citem.value)
+								
+								}
+								
+							}
+						
+						this.relinks = rellink.join("&")						
+						
+						
+						cmenlen = cmen.getChildren().length
+						isorgroupraw = cmen.getChildren()[cmenlen-2].checked
+						if (isorgroupraw == true) {isorgroup = "AND"} else {isorgroup = "OR"};
+						if (outs[cc] == undefined) {
+							outs[cc] = {vals:[],jt:" " + isorgroup};
+						}
+						isorraw = cmen.getChildren()[cmenlen-1].checked
+						if (isorraw == true) {isor = "AND"} else {isor = "OR"};
+						outs[cc].vals.push(isor + " taxonomy LIKE '%\"tid\": \"" + citem.value + "\"%'")
+			
+			
 					};
 				}));
+				
+				runningstr = ""
+	 	
+				 for (groupl in outs) {
+					 
+					 oqs = outs[groupl].vals.join(" ");
+					 oqs = oqs.slice(3,oqs.length)
+					 stepstr = outs[groupl].jt + " (" + oqs + ")"
+					 runningstr = runningstr + stepstr
+					 
+				 }
+		
+				runningstr = runningstr.slice(4,runningstr.length);
+				
+				//alert(runningstr);
 		  
 		  },
 		   

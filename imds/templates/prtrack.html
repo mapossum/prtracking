@@ -14,14 +14,14 @@
 
 <div data-dojo-type="dijit/form/DropDownButton">
   <span>Status</span>
-  <div data-dojo-type="dijit/DropDownMenu"  style="display: none;" data-dojo-props="text:'Status', tid:''">
+  <div data-dojo-type="dijit/DropDownMenu"  style="display: none;" data-dojo-props="text:'Status'">
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '75'">Completed</div>
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '76'">In Progress (Funded)</div>
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '77'">In Progress (Needs Funding)</div>
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '78'">Proposed</div>
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '79'">Conceptual</div>
-	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Between</b> Group Logic: AND (Click to Switch)</div>
-	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Within</b> Group Logic: OR (Click to Switch)</div>
+	<div class="logicCheck betweenCheck" data-dojo-type="dijit/CheckedMenuItem" checked=true data-dojo-props=""><b>Between</b> Group Logic (Checked = AND / Unchecked = OR)</div>
+	<div class="logicCheck withinCheck" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Within</b> Group Logic (Checked = AND / Unchecked = OR)</div>
   </div>
 </div>
 
@@ -35,8 +35,8 @@
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '72'">Groundwater</div>
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '73'">Surface Water</div>
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '74'">Air/Atmosphere/Climate</div>
-	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Between</b> Group Logic: AND (Click to Switch)</div>
-	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Within</b> Group Logic: OR (Click to Switch)</div>
+	<div class="logicCheck betweenCheck" data-dojo-type="dijit/CheckedMenuItem" checked=true data-dojo-props=""><b>Between</b> Group Logic (Checked = AND / Unchecked = OR)</div>
+	<div class="logicCheck withinCheck" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Within</b> Group Logic (Checked = AND / Unchecked = OR)</div>
   </div>
 </div>
 
@@ -54,15 +54,15 @@
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '86'">Pelagic / Open Water</div>
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '11'">Lakes and Ponds</div>
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '5'">Grassland</div>
-	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '10'">Wetlands</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '10, knaid: 490'">Wetlands</div>
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '4'">Savanna</div>
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '85'">Nearshore / Littoral</div>
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '1'">Terrestrial</div>
-	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '9'">Rivers</div>
-	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '3'">Forest</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '9', knaid: 380">Rivers</div>
+	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '3', knaid: 495">Forest</div>
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '84'">Embayments</div>
-	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Between</b> Group Logic: AND (Click to Switch)</div>
-	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Within</b> Group Logic: OR (Click to Switch)</div>
+	<div class="logicCheck betweenCheck" data-dojo-type="dijit/CheckedMenuItem" checked=true data-dojo-props=""><b>Between</b> Group Logic (Checked = AND / Unchecked = OR)</div>
+	<div class="logicCheck withinCheck" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Within</b> Group Logic (Checked = AND / Unchecked = OR)</div>
   </div>
 </div>
 
@@ -82,8 +82,8 @@
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '47'">Agriculture</div>
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '46'">Rural Development</div>
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '45'">Urban Development</div>
-	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Between</b> Group Logic: AND (Click to Switch)</div>
-	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Within</b> Group Logic: OR (Click to Switch)</div>
+	<div class="logicCheck betweenCheck" data-dojo-type="dijit/CheckedMenuItem" checked=true data-dojo-props=""><b>Between</b> Group Logic (Checked = AND / Unchecked = OR)</div>
+	<div class="logicCheck withinCheck" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Within</b> Group Logic (Checked = AND / Unchecked = OR)</div>
   </div>
 </div>
 
@@ -98,8 +98,8 @@
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '38'">Landscape Condition</div>
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '42'">Energy, Matter, and Nutrient Flow</div>
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '202'">Ecosystem Structure or Pattern</div>
-	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Between</b> Group Logic: AND (Click to Switch)</div>
-	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Within</b> Group Logic: OR (Click to Switch)</div>
+	<div class="logicCheck betweenCheck" data-dojo-type="dijit/CheckedMenuItem" checked=true data-dojo-props=""><b>Between</b> Group Logic (Checked = AND / Unchecked = OR)</div>
+	<div class="logicCheck withinCheck" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Within</b> Group Logic (Checked = AND / Unchecked = OR)</div>
   </div>
 </div>
 
@@ -125,8 +125,8 @@
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '19'">Forbs</div>
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '27'">Zooplankton</div>
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '14'">Trees</div>
-	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Between</b> Group Logic: AND (Click to Switch)</div>
-	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Within</b> Group Logic: OR (Click to Switch)</div>
+	<div class="logicCheck betweenCheck" data-dojo-type="dijit/CheckedMenuItem" checked=true data-dojo-props=""><b>Between</b> Group Logic (Checked = AND / Unchecked = OR)</div>
+	<div class="logicCheck withinCheck" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Within</b> Group Logic (Checked = AND / Unchecked = OR)</div>
   </div>
 </div>
 
@@ -140,8 +140,8 @@
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '61'">Education/Awareness</div>
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '64'">Economic Incentives</div>
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '62'">Administrative Policies</div>
-	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Between</b> Group Logic: AND (Click to Switch)</div>
-	<div data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Within</b> Group Logic: OR (Click to Switch)</div>
+	<div class="logicCheck betweenCheck" data-dojo-type="dijit/CheckedMenuItem" checked=true data-dojo-props=""><b>Between</b> Group Logic (Checked = AND / Unchecked = OR)</div>
+	<div class="logicCheck withinCheck" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props=""><b>Within</b> Group Logic (Checked = AND / Unchecked = OR)</div>
   </div>
 </div>
 
