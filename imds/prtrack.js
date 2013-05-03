@@ -105,9 +105,7 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 			 this.map.reposition();
 			 
 			 this.inherited(arguments);
-		
-		
-		
+			
 		this.maplayer = new esri.layers.ArcGISDynamicMapServiceLayer("http://tnc.usm.edu/ArcGIS/rest/services/IMDS/ProjectTracking/MapServer");
 		this.maplayer.setOpacity(0.6)	
 		this.maplayer.setVisibleLayers([1])
@@ -173,21 +171,56 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
         this.map.infoWindow = popup;
 		
         //create a feature layer based on the feature collection
-        this.featureLayer = new esri.layers.FeatureLayer("http://tnc.usm.edu/ArcGIS/rest/services/IMDS/ProjectTracking/MapServer/0",{
+        this.prlayer = new esri.layers.FeatureLayer("http://tnc.usm.edu/ArcGIS/rest/services/IMDS/ProjectTracking/MapServer/0",{
 	        mode: esri.layers.FeatureLayer.MODE_SELECTION,
 	        infoTemplate: popupTemplate,//new esri.InfoTemplate("<br><a href='http://tnc.greenlitestaging.com/project-tracking/${nid}' target='_blank' >${title}</a>","${body}"),
 	        outFields: ["*"]
 	       });
 
-		this.map.addLayers([this.featureLayer]);
+		this.map.addLayers([this.prlayer]);
 		
 		query = new esri.tasks.Query();
 		query.where = "OBJECTID > -1";
-		this.featureLayer.selectFeatures(query,esri.layers.FeatureLayer.SELECTION_NEW, function(f,sm) {thing.selcomplete(f,sm,thing)});
+		this.prlayer.selectFeatures(query,esri.layers.FeatureLayer.SELECTION_NEW, function(f,sm) {thing.selcomplete(f,sm,thing)});
 			 
 		   },
 		   
 		  restrictGeography: function() {
+		  
+				
+				selfeats = this.featureLayer.getSelectedFeatures();		
+					
+				FeatureExtent = esri.graphicsExtent(selfeats);
+					
+				this.map.setExtent(FeatureExtent, true);
+				
+				query = new esri.tasks.Query();
+				
+				knartvals = {}
+			
+				  
+				 geopart = ""
+				 geoq = []
+				 
+				 if (selfeats.length != 0) { 
+				 
+				  for (feat in selfeats) {
+					  
+					  knnow = selfeats[feat].attributes["Knowledge_Network_ID"] + "?" + Math.floor(Math.random()*1000)
+					  
+					  if (!(knnow in knartvals)) {
+						  
+						  knartvals[knnow] = selfeats[feat].attributes["InlandAquaticUnit"];
+						  
+					  }
+					 
+					  levf = "Level" + this.currentlevel + "_Id"
+					  geoq.push(levf + "=" + selfeats[feat].attributes[levf])
+				  }
+					  
+				 geopart = " AND (" + geoq.join(" OR ") + ")"
+				
+				}
 
 				checkers = dq(".taxaCheck");
 		 
@@ -199,8 +232,8 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 					citem = registry.byNode(entry);
 					cmen = dijit.getEnclosingWidget(entry.parentNode);
 					if (citem.checked == true) {
-							cc = citem.get("text");
-							ctid = citem.get("tid");
+							cc = cmen.get("text");
+							ctid = cmen.get("tid");
 							a = citem.get("value");
 							knart = citem.get("knaid");
 
@@ -230,6 +263,7 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 						if (isorgroupraw == true) {isorgroup = "AND"} else {isorgroup = "OR"};
 						if (outs[cc] == undefined) {
 							outs[cc] = {vals:[],jt:" " + isorgroup};
+							console.log(outs)
 						}
 						isorraw = cmen.getChildren()[cmenlen-1].checked
 						if (isorraw == true) {isor = "AND"} else {isor = "OR"};
@@ -252,7 +286,33 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		
 				runningstr = runningstr.slice(4,runningstr.length);
 				
-				//alert(runningstr);
+				outq = "(" + runningstr + ")" + geopart;
+	 
+				 testq = outq.slice(0,2);
+				 if (testq == "()") {
+					 
+					outq = "ObjectID < 0" 
+				 }
+				  
+				  query.where = outq;
+					
+				
+				  this.prlayer.selectFeatures(query,esri.layers.FeatureLayer.SELECTION_NEW)//, lang.hitch(this, )) //, function(f,sm) {thing.selcomplete(f,sm,thing)},function(a,b) {alert(a)});
+
+				  knout = ""
+				  
+				  for (kn in knartvals) {
+					  
+					  knout = knout + "&nbsp;&nbsp;&nbsp;&nbsp;<a href='http://imds.greenlitestaging.com/knowledge-network/" + kn + "' target='_blank'>" + knartvals[kn] + "</a><br>";
+				  }
+				  
+				  alert(knout)
+				  
+				  //this.relatedContent.items.get(0).update("Related Knowledge Network Items:<br>&nbsp;&nbsp;<a href='http://imds.greenlitestaging.com/knowledge-network-search/search?keywords=&" + this.relinks +"' target='_blank'>Models & Collaboratives</a><br>&nbsp;&nbsp;Related Articles:<br>" + knout + "<a href='http://imds.greenlitestaging.com/data-catalog-search/search?keywords=&" + this.relinks +"' target='_blank'>Related Data Catalog Items</a><br><a href='http://imds.greenlitestaging.com/dynamic-maps-search/search?keywords=&" + this.relinks + "' target='_blank'>Related Dynamic Maps</a><br><a href='http://imds.greenlitestaging.com/decision-tools-search/search?keywords=&" + this.relinks + "' target='_blank'>Related Decision Tools</a>") 
+				 
+				 //this.relatedContent.alignTo(this.map.id,"tr-tr", [-2, 27]);
+				  
+				 //this.relatedContent.show();
 		  
 		  },
 		   
@@ -291,8 +351,8 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		
 	//	} 
 	
-		  atb = dijit.byId("ATypeButton");
-		  ctype = atb.label;
+		//  atb = dijit.byId("ATypeButton");
+		 // ctype = atb.label;
 	
 		
 	      var query = new esri.tasks.Query();
@@ -310,8 +370,8 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
            
 		  query.where = thing.maplayer.layerDefinitions[1];	
           
-          //if (evt.shiftKey == true) {
-          if (ctype == "Cumulative") {
+          if (evt.shiftKey == true) {
+          //if (ctype == "Cumulative") {
           	 node = dom.byId(thing.outputid);
 			 dojo.empty(node);
           thing.featureLayer.selectFeatures(query,esri.layers.FeatureLayer.SELECTION_ADD,function(f,sm) {thing.featureSelector(f,sm,thing)});
