@@ -100,7 +100,13 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 				a = mywidget.get("value");
 				on(mywidget, "change", lang.hitch(this,this.restrictGeography));
 			}));
+
+		 allchecks = dq(".logicCheck");
 		 
+		 array.forEach(allchecks, lang.hitch(this,function(entry, i) {
+				mywidget = registry.byNode(entry);
+				on(mywidget, "change", lang.hitch(this,this.restrictGeography));
+			}));			
 		 
 			 this.map.reposition();
 			 
@@ -287,7 +293,7 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 				runningstr = runningstr.slice(4,runningstr.length);
 				
 				outq = "(" + runningstr + ")" + geopart;
-	 
+				
 				 testq = outq.slice(0,2);
 				 if (testq == "()") {
 					 
@@ -358,6 +364,62 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 			//grid.destroy();
 			
 			
+				if (f.length > 0) {
+		
+					totalm = 0
+					
+					Ext.Array.each(f, function(feat, index, f) {
+					 descar = eval(feat.attributes["field_pt_short_description"]);
+					 desc = descar[0].value;
+					 
+					 descar2 = eval(feat.attributes["field_branding_photo"]);
+					 
+					 mtt = eval(feat.attributes["field_funding_amount"]); 
+					 money = parseFloat(mtt[0].amount);
+					 
+					 
+					 
+					 if (isNaN(money)) {
+						 money = 0.0;
+					 }
+					 
+					 totalm = totalm + money;
+				
+					 try {
+					 fbp = descar2[0].filepath;
+					 feat.attributes["photo"] = "http://imds.greenlitestaging.com/" + fbp;
+					 console.log(fbp);
+					 } catch(e) {
+						 console.log(desc);
+					 }
+					
+					 //console.log(fbp);
+					 feat.attributes["desc"] = desc;
+					 
+					}, thing);
+					
+					
+					keys = Ext.Object.getKeys(f[0].attributes); 
+					
+					dat = [];
+					Ext.Array.each(f, function(feat, index, f) {
+						dat.push(feat.attributes)
+						
+						
+					}, thing);
+					
+				totalf = "$" + Ext.util.Format.number(totalm, "0,000.00");	
+
+					labelnode = dom.byId("statarea");
+					labelnode.innerHTML = ("Projects (" + f.length + " selected) - Total Funding " + totalf + " :" )
+				
+				} else {
+		
+					labelnode = dom.byId("statarea");
+					labelnode.innerHTML = ("No project match the current query - Please change parameters" )	
+		
+				}
+			
 		  
 		  },
 		   
@@ -387,17 +449,6 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		   
 		   
 		 genreport: function(evt) {
-		    		//thing.up().setTitle("Assess and Adapt - No Basin Selected");
-		
-		
-	//	if (thing.cbox.value == "cumulative") {
-		
-	//		thing.removeAll();
-		
-	//	} 
-	
-		//  atb = dijit.byId("ATypeButton");
-		 // ctype = atb.label;
 	
 		
 	      var query = new esri.tasks.Query();
@@ -419,9 +470,9 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
           //if (ctype == "Cumulative") {
           	 node = dom.byId(thing.outputid);
 			 dojo.empty(node);
-          thing.featureLayer.selectFeatures(query,esri.layers.FeatureLayer.SELECTION_ADD,function(f,sm) {thing.featureSelector(f,sm,thing)});
+			 thing.featureLayer.selectFeatures(query,esri.layers.FeatureLayer.SELECTION_ADD, lang.hitch(thing, thing.featureSelector));
 			} else {
-		  thing.featureLayer.selectFeatures(query,esri.layers.FeatureLayer.SELECTION_NEW,function(f,sm) {thing.featureSelector(f,sm,thing)});
+		     thing.featureLayer.selectFeatures(query,esri.layers.FeatureLayer.SELECTION_NEW, lang.hitch(thing, thing.featureSelector));
 			}
 			
 		 	
@@ -439,391 +490,17 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 			 
 			 this.zoomcurrentlevel();
 			 
+			 this.restrictGeography();
+			 
 			 
 		 },
 		 
 		featureSelector: function(features, selectionMethod) {
 		
-		
-		//this.removeAll();
-		
-		feats = this.featureLayer.getSelectedFeatures()
-		
-		
-		if (feats.length == 1) {
-		
-		newlab = feats[0].attributes["InlandAquaticUnit"];
-		
-		} else if (feats.length == 2) {
-		
-		newlab = feats[0].attributes["InlandAquaticUnit"] + " and " + feats[1].attributes["InlandAquaticUnit"]
-		
-		} else {
-			
-		newlab = feats[0].attributes["InlandAquaticUnit"] + " and " + (feats.length - 1) + " other selected basins."	
-			
-		}
-		
-	refNode = dojo.byId(this.outputid);
-		
-		tablerec = domConstruct.create("table");
-		domConstruct.place(tablerec, refNode, "first");
-		
-		tablerow1 = domConstruct.create("tr");
-		domConstruct.place(tablerow1, tablerec, "last");
-		
-		td1 = domConstruct.create("td");
-		domConstruct.place(td1, tablerow1, "last");
-		
-		td2 = domConstruct.create("td");
-		domConstruct.place(td2, tablerow1, "last");
-		
-		tit = domConstruct.create("h3");
-		tit.innerHTML = "<b>" + newlab + "</b>"
-		domConstruct.place(tit, refNode, "first");
-		
-		brn = domConstruct.create("br");
-		domConstruct.place(brn, refNode, "first");
-		
-		//domAttr.set(td1, "width", "5");
-		
-		//this.up().setTitle(newlab);
-		
-		FeatureExtent = esri.graphicsExtent(feats);
-		
-		this.map.setExtent(FeatureExtent, true);
-		
-		//alert(features[0].attributes.SPGoal)
-		
-		featlist = []
-		
-		for (f in feats) {
-		
-			featlist.push(feats[f].attributes["OBJECTID"]);
-		
-		}
-		
-	lev = feats[0].attributes["Level"];
-	
-	checklinks = [53,9]
-	
-	checkvals = checklinks.join(",")
-	
-	relatedlinkstext = ("Related Content</b> - (Click a link below)<ul class='a'><li><a href='http://tnc.usm.edu/pt/?taxa=" + checkvals + "&level=" + lev + "&units=" + featlist.join(",") + "&geo=trib' target='_blank'>See projects addressing stream connectivity issue in this geography</a></li><li><a href='http://imds.greenlitestaging.com/knowledge-network/532' target='_blank'>Read more about Lake Sturgeon profile</a></li><li><a href='http://imds.greenlitestaging.com/data-catalog-search/search?keywords=&term_node_tid_depth%5B%5D=9&term_node_tid_depth_3%5B%5D=53' target='_blank'>Get data related to stream connectivity</a></li><li><a href='http://imds.greenlitestaging.com/dynamic-maps-search/search?keywords=&term_node_tid_depth%5B%5D=9&term_node_tid_depth_3%5B%5D=53' target='_blank'>View maps related to stream connectivity issue</a></li><li><a href='http://imds.greenlitestaging.com/decision-tools-search/search?keywords=&term_node_tid_depth%5B%5D=9&term_node_tid_depth_3%5B%5D=53' target='_blank'>Get tools related to stream connectivity</a></li></ul>");
-	
-	td2.innerHTML = relatedlinkstext;
-	
-	spoptions = {fieldname:"Sturgeon_Status_",start:2005,end:2012,title:"Sturgeon Population",ingnoresum:true,yformat:Ext.util.Format.numberRenderer('0,000')}
-	mcoptions = {fieldname:"Miles_Connected_",start:2005,end:2012,title:"Miles Reconnected",ingnoresum:false,yformat:Ext.util.Format.numberRenderer('0,000')}
-	droptions = {fieldname:"Barriers_Addressed_",start:2005,end:2012,title:"Barriers Addressed",ingnoresum:false,yformat:Ext.util.Format.numberRenderer('0,000')}
-	foptions = {fieldname:"Funding_",start:2005,end:2012,title:"Funding",ingnoresum:false,yformat:Ext.util.Format.usMoney}
-	
+		  this.restrictGeography();
 
-	var n = domConstruct.create("div");
-	domConstruct.place(n, td1, "last");
-	
-
-	
-		var tc = new TabContainer({
-            style: "height: 420px; width: 600px;"
-        }, n);
-
-        var cp1 = new ContentPane({
-             title: spoptions.title
-        });
-        tc.addChild(cp1);
-        
-        cp1.set("content","<div id='" + cp1.id + spoptions.fieldname + "'></div>")
-        
-        spoptions['refid'] = cp1.id + spoptions.fieldname;
-
-        var cp2 = new ContentPane({
-             title: mcoptions.title,
-             content:"<div id='" + mcoptions.fieldname + "loc'></div>"
-        });
-        tc.addChild(cp2);
-
-        cp2.set("content","<div id='" + cp2.id + mcoptions.fieldname + "'></div>")
-        
-        mcoptions['refid'] = cp2.id + mcoptions.fieldname;
-                
-        var cp3 = new ContentPane({
-             title: droptions.title,
-             content:"<div id='" + droptions.fieldname + "loc'></div>"
-        });
-        tc.addChild(cp3);
-        
-        cp3.set("content","<div id='" + cp3.id + droptions.fieldname + "'></div>")
-        
-        droptions['refid'] = cp3.id + droptions.fieldname;
-
-        var cp4 = new ContentPane({
-             title: foptions.title,
-             content:"<div id='" + foptions.fieldname + "loc'></div>"
-        });
-        tc.addChild(cp4);
-        
-        cp4.set("content","<div id='" + cp4.id + foptions.fieldname + "'></div>")
-        
-        foptions['refid'] = cp4.id + foptions.fieldname;
-        
-        
-        tc.startup();	
-
-     
-	
-	spchart = this.createChart(feats, spoptions);
-	
-	tc.selectChild(cp2);
-	
-	mcchart = this.createChart(feats, mcoptions);
-	
-	tc.selectChild(cp3);
-	
-	drchart = this.createChart(feats, droptions);
-	
-	tc.selectChild(cp4);
-	
-	fchart = this.createChart(feats, foptions);
-	
-	tc.selectChild(cp1);
-		
-	tabs =	Ext.create('Ext.tab.Panel', {
-    activeTab: 0,
-    items: [
-            mcchart,drchart,fchart
-    ]
-	});
-		
-	this.add([tabs]);	
-		
-	},
-		
-
-
-  createChart: function(features, options) {
-  
-  root = options.fieldname;
-  starty = options.start;
-  endy = options.end;
-  intitle = options.title;
-  ignorersum = options.ingnoresum;
-  yformat = options.yformat;
-
-
-sers = [{
-            type: 'line',
-            highlight: {
-                size: 20,
-                radius: 7
-            },
-            axis: 'left',
-            xField: 'name',
-            yField: 'Goal',
-            title: 'Goal',
-            markerConfig: {
-                type: 'cross',
-                size: 4,
-                radius: 4,
-                'stroke-width': 0
-            },
-			style: {
-    			stroke: '#FF0000',
-    			'stroke-width': 3,
-    			opacity: 0.9
-				}
-        },
-        {
-            type: 'line',
-            style: {
-    			stroke: '#00ff00',
-    			'stroke-width': 2,
-    			opacity: 0.9
-				},
-            axis: 'left',
-            fill: false,
-            xField: 'name',
-			title: intitle,
-            yField: 'obs',
-            markerConfig: {
-                type: 'circle',
-				fill: '#000099',
-                size: 4,
-                radius: 4,
-                'stroke-width': 0
-            }
-        }]
-
-fds = ['Goal', 'obs']
-
-
-d = []
-x = 0
-
-
-if (ignorersum) {
-
-for (var i = starty; i <= endy; i++) {
-
-	cval = 0 
-	for (f in features) {
-	cval = cval + features[f].attributes[root + i]
-	}
- 
-	//cval = features[0].attributes[root + i]
-	
-	x = x + cval;
-	
-	gval = 0
-	for (f in features) {
-	gval = gval + features[f].attributes[root + "Overall_Goal"]
-	}
-	
-	d.push({ 'name': i, 'Goal': gval,  'obs': cval,  'rsum': x})
-
-var store2 = Ext.create('Ext.data.JsonStore', {
-    fields: ['name', 'Goal', 'obs', 'rsum'],
-    data: d
-});
-
-}
- 
-} else {
-
-
-
-for (var i = starty; i <= endy; i++) {
-
-	cval = 0
-	for (f in features) {	
-	cval = cval + features[f].attributes[root + i]
-	}
-	x = x + cval;
-	
-	gval = 0
-	for (f in features) {
-	gval = gval + features[f].attributes[root + "Overall_Goal"]
-	}
-	
-	ogval = 0
-	for (f in features) {
-	ogval = ogval + features[f].attributes[root + "Goal_" + i]
-	}
-	
-	
-	d.push({ 'name': i, 'Goal': gval, 'yGoal': ogval, 'obs': cval,  'rsum': x})
-	
-}
-
-var store2 = Ext.create('Ext.data.JsonStore', {
-    fields: ['name', 'Goal', 'yGoal', 'obs', 'rsum'],
-    data: d
-});
-
- fds.push('yGoal')
- sers.push({
-            type: 'line',
-            style: {
-    			stroke: '#EE8800',
-    			'stroke-width': 2,
-    			opacity: 0.9
-				},
-            axis: 'left',
-            fill: false,
-            xField: 'name',
-			title: 'Yearly Goal',
-            yField: 'yGoal',
-            markerConfig: {
-                type: 'circle',
-				fill: '#EEEE00',
-                size: 4,
-                radius: 4,
-                'stroke-width': 0
-            }
-        })
-
-}
-
-
-
-if (!(ignorersum)) {
-
-fds.push('rsum')
-sers.push({
-            type: 'column',
-            axis: 'left',
-			title: 'Cumulative',
-            highlight: true,
-            tips: {
-              trackMouse: true,
-              width: 80,
-              height: 28,
-              renderer: function(storeItem, item) {
-                this.setTitle(storeItem.get('name') + ': ' + storeItem.get('rsum') );
-              }
-            },
-            //label: {
-//              display: 'insideEnd',
-//              'text-anchor': 'middle',
-//                field: 'rsum',
-//                renderer: Ext.util.Format.numberRenderer('0'),
-//                orientation: 'vertical',
-//                color: '#333'
-//            },
-			style: {
-    			fill: '#119900',
-    			opacity: 0.9
-				},
-            xField: 'name',
-            yField: 'rsum'
-        })
-
-} 
-
-
-
-cht = Ext.create('Ext.chart.Chart', {
-	renderTo: options.refid,
-    width: 570,
-    height: 370,
-	title: intitle,
-    animate: true,
-    store: store2,
-	background: {
-    //color string
-    fill: '#FFF'
-	},
-	legend: {
-        position: 'bottom'
-    },
-    axes: [
-        {
-            type: 'Numeric',
-            position: 'left',
-            fields: fds,
-            label: {
-                renderer: yformat
-            },
-            title: intitle,
-            grid: true,
-            minimum: 0
-        },
-        {
-            type: 'Category',
-            position: 'bottom',
-            fields: ['name'],
-            title: 'Year'
-        }
-    ],
-    series: sers
-});
-
-		
-return cht;
-
-	
-},
-		   
+		},
+		 
 		   _close: function() {
 		   
 		   		this.destroy();   
