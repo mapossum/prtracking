@@ -1,7 +1,7 @@
 //, summarizebyunit
 
-define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo/text!./templates/prtrack.html", "dojo/dom-style", "dojo/dom-class", "dojo/_base/fx", "dojo/_base/lang", "dojo/on", "dojo/mouse", "dojo/query", "dojo/store/Memory", "dijit/form/ComboBox", "dijit/form/DropDownButton", "dijit/DropDownMenu", "dijit/MenuItem", "dojo/dom", "dojo/parser", "dojo/query", "dijit/registry", "dijit/layout/TabContainer", "dijit/layout/ContentPane", "dojo/dom-construct", "dijit/form/Button", "dijit/CheckedMenuItem", "dojo/_base/array"],
-    function(declare, WidgetBase, TemplatedMixin, template, domStyle, domClass, baseFx, lang, on, mouse, query, Memory, ComboBox, DropDownButton, DropDownMenu, MenuItem, dom, parser, dq, registry, TabContainer, ContentPane, domConstruct, Button, CheckedMenuItem, array){
+define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo/text!./templates/prtrack.html", "dojo/dom-style", "dojo/dom-class", "dojo/_base/fx", "dojo/_base/lang", "dojo/on", "dojo/mouse", "dojo/query", "dojo/store/Memory", "dijit/form/ComboBox", "dijit/form/DropDownButton", "dijit/DropDownMenu", "dijit/MenuItem", "dojo/dom", "dojo/parser", "dojo/query", "dijit/registry", "dijit/layout/TabContainer", "dijit/layout/ContentPane", "dojo/dom-construct", "dijit/form/Button", "dijit/CheckedMenuItem", "dojo/_base/array", "dgrid/Grid"],
+    function(declare, WidgetBase, TemplatedMixin, template, domStyle, domClass, baseFx, lang, on, mouse, query, Memory, ComboBox, DropDownButton, DropDownMenu, MenuItem, dom, parser, dq, registry, TabContainer, ContentPane, domConstruct, Button, CheckedMenuItem, array, Grid){
         return declare([WidgetBase, TemplatedMixin], {
             // Some default values for our author
             // These typically map to whatever you're handing into the constructor
@@ -181,7 +181,7 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		
 		query = new esri.tasks.Query();
 		query.where = "OBJECTID > -1";
-		this.prlayer.selectFeatures(query,esri.layers.FeatureLayer.SELECTION_NEW, function(f,sm) {thing.selcomplete(f,sm,thing)});
+		this.prlayer.selectFeatures(query,esri.layers.FeatureLayer.SELECTION_NEW, lang.hitch(this, this.newprselect))
 			 
 		   },
 		   
@@ -189,10 +189,6 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		  
 				
 				selfeats = this.featureLayer.getSelectedFeatures();		
-					
-				FeatureExtent = esri.graphicsExtent(selfeats);
-					
-				this.map.setExtent(FeatureExtent, true);
 				
 				query = new esri.tasks.Query();
 				
@@ -203,6 +199,10 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 				 geoq = []
 				 
 				 if (selfeats.length != 0) { 
+				 
+				  FeatureExtent = esri.graphicsExtent(selfeats);
+					
+				  this.map.setExtent(FeatureExtent, true);
 				 
 				  for (feat in selfeats) {
 					  
@@ -297,7 +297,7 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 				  query.where = outq;
 					
 				
-				  this.prlayer.selectFeatures(query,esri.layers.FeatureLayer.SELECTION_NEW)//, lang.hitch(this, )) //, function(f,sm) {thing.selcomplete(f,sm,thing)},function(a,b) {alert(a)});
+				  this.prlayer.selectFeatures(query,esri.layers.FeatureLayer.SELECTION_NEW, lang.hitch(this, this.newprselect)) //, function(f,sm) {thing.selcomplete(f,sm,thing)},function(a,b) {alert(a)});
 
 				  knout = ""
 				  
@@ -306,13 +306,45 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 					  knout = knout + "&nbsp;&nbsp;&nbsp;&nbsp;<a href='http://imds.greenlitestaging.com/knowledge-network/" + kn + "' target='_blank'>" + knartvals[kn] + "</a><br>";
 				  }
 				  
-				  alert(knout)
+				  //alert(knout)
 				  
 				  //this.relatedContent.items.get(0).update("Related Knowledge Network Items:<br>&nbsp;&nbsp;<a href='http://imds.greenlitestaging.com/knowledge-network-search/search?keywords=&" + this.relinks +"' target='_blank'>Models & Collaboratives</a><br>&nbsp;&nbsp;Related Articles:<br>" + knout + "<a href='http://imds.greenlitestaging.com/data-catalog-search/search?keywords=&" + this.relinks +"' target='_blank'>Related Data Catalog Items</a><br><a href='http://imds.greenlitestaging.com/dynamic-maps-search/search?keywords=&" + this.relinks + "' target='_blank'>Related Dynamic Maps</a><br><a href='http://imds.greenlitestaging.com/decision-tools-search/search?keywords=&" + this.relinks + "' target='_blank'>Related Decision Tools</a>") 
 				 
 				 //this.relatedContent.alignTo(this.map.id,"tr-tr", [-2, 27]);
 				  
 				 //this.relatedContent.show();
+		  
+		  },
+		  
+		  newprselect: function(f,sm) {
+		  
+		  
+			 var data = [
+                { first: "Bob", last: "Barker", age: 89 },
+                { first: "Vanna", last: "White", age: 55 },
+                { first: "Pat", last: "Sajak", age: 65 }
+            ];
+
+            grid = new Grid({
+                columns: {
+                    first: "First Name",
+                    last: "Last Name",
+                    age: "Age"
+                }
+            }, "grid");
+			
+            grid.renderArray(data);
+			
+			
+			a = grid.row(0)
+			
+			b = a.data
+			
+			alert("hi")
+			
+			grid.destroyRecursive(true);
+			
+			
 		  
 		  },
 		   
