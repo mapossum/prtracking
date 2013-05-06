@@ -1,7 +1,7 @@
 //, summarizebyunit
 
-define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo/text!./templates/prtrack.html", "dojo/dom-style", "dojo/dom-class", "dojo/_base/fx", "dojo/_base/lang", "dojo/on", "dojo/mouse", "dojo/query", "dojo/store/Memory", "dijit/form/ComboBox", "dijit/form/DropDownButton", "dijit/DropDownMenu", "dijit/MenuItem", "dojo/dom", "dojo/parser", "dojo/query", "dijit/registry", "dijit/layout/TabContainer", "dijit/layout/ContentPane", "dojo/dom-construct", "dijit/form/Button", "dijit/CheckedMenuItem", "dojo/_base/array", "dgrid/Grid"],
-    function(declare, WidgetBase, TemplatedMixin, template, domStyle, domClass, baseFx, lang, on, mouse, query, Memory, ComboBox, DropDownButton, DropDownMenu, MenuItem, dom, parser, dq, registry, TabContainer, ContentPane, domConstruct, Button, CheckedMenuItem, array, Grid){
+define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo/text!./templates/prtrack.html", "dojo/dom-style", "dojo/dom-class", "dojo/_base/fx", "dojo/_base/lang", "dojo/on", "dojo/mouse", "dojo/query", "dojo/store/Memory", "dijit/form/ComboBox", "dijit/form/DropDownButton", "dijit/DropDownMenu", "dijit/MenuItem", "dojo/dom", "dojo/parser", "dojo/query", "dijit/registry", "dijit/layout/TabContainer", "dijit/layout/ContentPane", "dojo/dom-construct", "dijit/form/Button", "dijit/CheckedMenuItem", "dojo/_base/array", "dgrid/Grid", "dojo/store/Memory", "dgrid/OnDemandGrid"],
+    function(declare, WidgetBase, TemplatedMixin, template, domStyle, domClass, baseFx, lang, on, mouse, query, Memory, ComboBox, DropDownButton, DropDownMenu, MenuItem, dom, parser, dq, registry, TabContainer, ContentPane, domConstruct, Button, CheckedMenuItem, array, Grid, Memory, OnDemandGrid){
         return declare([WidgetBase, TemplatedMixin], {
             // Some default values for our author
             // These typically map to whatever you're handing into the constructor
@@ -317,32 +317,45 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		  },
 		  
 		  newprselect: function(f,sm) {
-		  
-		  
-			 var data = [
-                { first: "Bob", last: "Barker", age: 89 },
-                { first: "Vanna", last: "White", age: 55 },
-                { first: "Pat", last: "Sajak", age: 65 }
-            ];
+	
+	
+		   data = []
+		   
+		   for (feat in f) {
 
-            grid = new Grid({
-                columns: {
-                    first: "First Name",
-                    last: "Last Name",
-                    age: "Age"
-                }
-            }, "grid");
+			atts = f[feat].attributes;
+			shortd = eval(atts.field_pt_short_description)
+			data.push({title:atts.title,"Project_Status":atts.Project_Status,field_pt_short_description:shortd[0].value});
+		   
+		   };
+		  
+		    var store = new Memory({ data: data });
+         
+        // Create an instance of OnDemandGrid referencing the store
+			var grid = new OnDemandGrid({
+				store: store,
+				columns: {
+					title: "Project Title",
+					field_pt_short_description: "Short Description",
+					Project_Status: "Status"
+					
+				}
+			}, "grid");
+     
+			grid.startup();
+		  
+		  
 			
-            grid.renderArray(data);
+			//alert("hi")
 			
 			
-			a = grid.row(0)
+			//store.remove(0)
 			
-			b = a.data
+			//grid.destroyRecursive(true);
 			
-			alert("hi")
+			//grid.removeRow(grid.row(0).data,false)
 			
-			grid.destroyRecursive(true);
+			//grid.destroy();
 			
 			
 		  
