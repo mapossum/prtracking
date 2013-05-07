@@ -1,7 +1,7 @@
 //, summarizebyunit
 
-define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo/text!./templates/prtrack.html", "dojo/dom-style", "dojo/dom-class", "dojo/_base/fx", "dojo/_base/lang", "dojo/on", "dojo/mouse", "dojo/query", "dojo/store/Memory", "dijit/form/ComboBox", "dijit/form/DropDownButton", "dijit/DropDownMenu", "dijit/MenuItem", "dojo/dom", "dojo/parser", "dojo/query", "dijit/registry", "dijit/layout/TabContainer", "dijit/layout/ContentPane", "dojo/dom-construct", "dijit/form/Button", "dijit/CheckedMenuItem", "dojo/_base/array", "dgrid/Grid", "dojo/store/Memory", "dgrid/OnDemandGrid"],
-    function(declare, WidgetBase, TemplatedMixin, template, domStyle, domClass, baseFx, lang, on, mouse, query, Memory, ComboBox, DropDownButton, DropDownMenu, MenuItem, dom, parser, dq, registry, TabContainer, ContentPane, domConstruct, Button, CheckedMenuItem, array, Grid, Memory, OnDemandGrid){
+define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo/text!./templates/prtrack.html", "dojo/dom-style", "dojo/dom-class", "dojo/_base/fx", "dojo/_base/kernel", "dojo/_base/lang", "dojo/on", "dojo/mouse", "dojo/query", "dojo/store/Memory", "dijit/form/ComboBox", "dijit/form/DropDownButton", "dijit/DropDownMenu", "dijit/MenuItem", "dojo/dom", "dojo/parser", "dojo/query", "dijit/registry", "dijit/layout/TabContainer", "dijit/layout/ContentPane", "dojo/dom-construct", "dijit/form/Button", "dijit/CheckedMenuItem", "dojo/_base/array", "dgrid/Grid", "dojo/store/Memory", "dgrid/OnDemandGrid", "dgrid/extensions/ColumnResizer"],
+    function(declare, WidgetBase, TemplatedMixin, template, domStyle, domClass, baseFx, dojo, lang, on, mouse, query, Memory, ComboBox, DropDownButton, DropDownMenu, MenuItem, dom, parser, dq, registry, TabContainer, ContentPane, domConstruct, Button, CheckedMenuItem, array, Grid, Memory, OnDemandGrid, ColumnResizer){
         return declare([WidgetBase, TemplatedMixin], {
             // Some default values for our author
             // These typically map to whatever you're handing into the constructor
@@ -50,11 +50,13 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		   
 		   startup: function() {
 		   
-		   parser.parse();
-		   
 		    thing = this;
 		    
-		   this.clearButton = new Button({
+
+		  		 parser.parse();
+				 
+				 
+				   this.clearButton = new Button({
             label: "Clear Selection",
             onClick: lang.hitch(this,this.clearall)
         }, "Cselect");
@@ -86,12 +88,6 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
             id: "LevelButton"
         });
         dom.byId("LSelect").appendChild(button2.domNode);
-		          
-		     //query("#" + this.domNode.id + " a").onclick(function(e){
-	         //  e.preventDefault(); 
-	          // });
-	             
-				 
 				 
 		 allchecks = dq(".taxaCheck");
 		 
@@ -108,6 +104,9 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 				on(mywidget, "change", lang.hitch(this,this.restrictGeography));
 			}));			
 		 
+	
+		
+
 			 this.map.reposition();
 			 
 			 this.inherited(arguments);
@@ -188,6 +187,8 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		query = new esri.tasks.Query();
 		query.where = "OBJECTID > -1";
 		this.prlayer.selectFeatures(query,esri.layers.FeatureLayer.SELECTION_NEW, lang.hitch(this, this.newprselect))
+		
+		
 			 
 		   },
 		   
@@ -323,90 +324,74 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		  },
 		  
 		  newprselect: function(f,sm) {
-	
+		  
 	
 		   data = []
 		   
-		   for (feat in f) {
-
-			atts = f[feat].attributes;
-			shortd = eval(atts.field_pt_short_description)
-			data.push({title:atts.title,"Project_Status":atts.Project_Status,field_pt_short_description:shortd[0].value});
+		   totalm = 0
 		   
-		   };
+		   array.forEach(f, lang.hitch(this, function(feat,i) {
+
+			atts = feat.attributes;
+			shortd = dojo.eval(atts.field_pt_short_description);
+			desc = shortd[0].value;
+			data.push({title:"<b>" + atts.title + "</b>","Project_Status":atts.Project_Status,field_pt_short_description:desc});
+					
+					 
+			//console.log(feat.attributes["field_branding_photo"])
+			descar2 = dojo.eval(feat.attributes["field_branding_photo"]);
+			
+			mtt = dojo.eval(feat.attributes["field_funding_amount"]); 
+			money = parseFloat(mtt[0].amount);
+					 
+					 
+					 
+			 if (isNaN(money)) {
+				 money = 0.0;
+			 }
+			 
+			 totalm = totalm + money;
+		
+			 try {
+			 fbp = descar2[0].filepath;
+			 feat.attributes["photo"] = "http://imds.greenlitestaging.com/" + fbp;
+			 console.log(fbp);
+			 } catch(e) {
+				 console.log(desc);
+			 }
+			
+			 //console.log(fbp);
+			 feat.attributes["desc"] = desc;			
+		   
+		   }));
 		  
 		    var store = new Memory({ data: data });
          
         // Create an instance of OnDemandGrid referencing the store
-			var grid = new OnDemandGrid({
+			var grid = new (declare([OnDemandGrid, ColumnResizer]))({
 				store: store,
 				columns: {
-					title: "Project Title",
-					field_pt_short_description: "Short Description",
-					Project_Status: "Status"
+					title: {
+						label: "Project Title",
+						resizable: true
+					},
+					field_pt_short_description: {
+						label: "Short Description",
+						resizable: true
+					},
+					Project_Status:  {
+						label: "Status",
+						resizable: true
+					}
 					
 				}
 			}, "grid");
      
+
 			grid.startup();
 		  
-		  
-			
-			//alert("hi")
-			
-			
-			//store.remove(0)
-			
-			//grid.destroyRecursive(true);
-			
-			//grid.removeRow(grid.row(0).data,false)
-			
-			//grid.destroy();
-			
-			
-				if (f.length > 0) {
 		
-					totalm = 0
-					
-					Ext.Array.each(f, function(feat, index, f) {
-					 descar = eval(feat.attributes["field_pt_short_description"]);
-					 desc = descar[0].value;
-					 
-					 descar2 = eval(feat.attributes["field_branding_photo"]);
-					 
-					 mtt = eval(feat.attributes["field_funding_amount"]); 
-					 money = parseFloat(mtt[0].amount);
-					 
-					 
-					 
-					 if (isNaN(money)) {
-						 money = 0.0;
-					 }
-					 
-					 totalm = totalm + money;
-				
-					 try {
-					 fbp = descar2[0].filepath;
-					 feat.attributes["photo"] = "http://imds.greenlitestaging.com/" + fbp;
-					 console.log(fbp);
-					 } catch(e) {
-						 console.log(desc);
-					 }
-					
-					 //console.log(fbp);
-					 feat.attributes["desc"] = desc;
-					 
-					}, thing);
-					
-					
-					keys = Ext.Object.getKeys(f[0].attributes); 
-					
-					dat = [];
-					Ext.Array.each(f, function(feat, index, f) {
-						dat.push(feat.attributes)
-						
-						
-					}, thing);
+			if (f.length > 0) {
 					
 				totalf = "$" + Ext.util.Format.number(totalm, "0,000.00");	
 
