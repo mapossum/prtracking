@@ -335,7 +335,7 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 			atts = feat.attributes;
 			shortd = dojo.eval(atts.field_pt_short_description);
 			desc = shortd[0].value;
-			data.push({title:"<b>" + atts.title + "</b>","Project_Status":atts.Project_Status,field_pt_short_description:desc});
+			data.push({title:atts.title,"Project_Status":atts.Project_Status,field_pt_short_description:desc});
 					
 					 
 			//console.log(feat.attributes["field_branding_photo"])
@@ -365,11 +365,11 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		   
 		   }));
 		  
-		    var store = new Memory({ data: data });
+		    //var store = new Memory({ data: data });
          
         // Create an instance of OnDemandGrid referencing the store
-			var grid = new (declare([OnDemandGrid, ColumnResizer]))({
-				store: store,
+			var grid = new (declare([Grid, ColumnResizer]))({
+				//store: store,
 				columns: {
 					title: {
 						label: "Project Title",
@@ -388,7 +388,7 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 			}, "grid");
      
 
-			grid.startup();
+			grid.renderArray(data);
 		  
 		
 			if (f.length > 0) {
@@ -464,6 +464,23 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		 },
 		 
 		 clearall: function(clears) {
+			 
+			 allchecks = dq(".taxaCheck");
+		 
+			array.forEach(allchecks, lang.hitch(this,function(entry, i) {
+				mywidget = registry.byNode(entry);
+				a = mywidget.set("checked", false);
+				//on(mywidget, "change", lang.hitch(this,this.restrictGeography));
+			}));
+
+			 allchecks = dq(".taxaStatus");
+		 
+			array.forEach(allchecks, lang.hitch(this,function(entry, i) {
+				mywidget = registry.byNode(entry);
+				a = mywidget.set("checked", true);
+				//on(mywidget, "change", lang.hitch(this,this.restrictGeography));
+			}));
+			 
 			 
 			 node = dom.byId(this.outputid);
 			 dojo.empty(node);
