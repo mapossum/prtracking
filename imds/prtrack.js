@@ -1,7 +1,7 @@
 //, summarizebyunit
 
-define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo/text!./templates/prtrack.html", "dojo/dom-style", "dojo/dom-class", "dojo/_base/fx", "dojo/_base/kernel", "dojo/_base/lang", "dojo/on", "dojo/mouse", "dojo/query", "dojo/store/Memory", "dijit/form/ComboBox", "dijit/form/DropDownButton", "dijit/DropDownMenu", "dijit/MenuItem", "dojo/dom", "dojo/parser", "dojo/query", "dijit/registry", "dijit/layout/TabContainer", "dijit/layout/ContentPane", "dojo/dom-construct", "dijit/form/Button", "dijit/CheckedMenuItem", "dojo/_base/array", "dgrid/Grid", "dojo/store/Memory", "dgrid/OnDemandGrid", "dgrid/extensions/ColumnResizer", "dojox/layout/FloatingPane"],
-    function(declare, WidgetBase, TemplatedMixin, template, domStyle, domClass, baseFx, dojo, lang, on, mouse, query, Memory, ComboBox, DropDownButton, DropDownMenu, MenuItem, dom, parser, dq, registry, TabContainer, ContentPane, domConstruct, Button, CheckedMenuItem, array, Grid, Memory, OnDemandGrid, ColumnResizer, FloatingPane){
+define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo/text!./templates/prtrack.html", "dojo/dom-style", "dojo/dom-class", "dojo/_base/fx", "dojo/_base/kernel", "dojo/_base/lang", "dojo/on", "dojo/mouse", "dojo/query", "dojo/store/Memory", "dijit/form/ComboBox", "dijit/form/DropDownButton", "dijit/DropDownMenu", "dijit/MenuItem", "dojo/dom", "dojo/parser", "dojo/query", "dijit/registry", "dijit/layout/TabContainer", "dijit/layout/ContentPane", "dojo/dom-construct", "dijit/form/Button", "dijit/CheckedMenuItem", "dojo/_base/array", "dgrid/Grid", "dojo/store/Memory", "dgrid/OnDemandGrid", "dgrid/extensions/ColumnResizer","dojo/dom-geometry", "dojox/layout/FloatingPane", "esri/dijit/Legend", "dojo/window"],
+    function(declare, WidgetBase, TemplatedMixin, template, domStyle, domClass, baseFx, dojo, lang, on, mouse, query, Memory, ComboBox, DropDownButton, DropDownMenu, MenuItem, dom, parser, dq, registry, TabContainer, ContentPane, domConstruct, Button, CheckedMenuItem, array, Grid, Memory, OnDemandGrid, ColumnResizer, domGeom, FloatingPane, Legend, win){
         return declare([WidgetBase, TemplatedMixin], {
             // Some default values for our author
             // These typically map to whatever you're handing into the constructor
@@ -21,6 +21,8 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
             mouseAnim: null,
             
             inputLayer: null,
+			
+			firstload: true,
             
             toolbar: null,
         
@@ -29,6 +31,7 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
             expanded: true,
             
             outputid: "",
+			
             
             destroy: function(){
             	   	
@@ -181,27 +184,136 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 	        infoTemplate: popupTemplate,//new esri.InfoTemplate("<br><a href='http://tnc.greenlitestaging.com/project-tracking/${nid}' target='_blank' >${title}</a>","${body}"),
 	        outFields: ["*"]
 	       });
+		  
 
 		this.map.addLayers([this.prlayer]);
 		
-		query = new esri.tasks.Query();
-		query.where = "OBJECTID > -1";
-		this.prlayer.selectFeatures(query,esri.layers.FeatureLayer.SELECTION_NEW, lang.hitch(this, this.newprselect))
+		//query = new esri.tasks.Query();
+		//query.where = "OBJECTID > -1";
+		//this.prlayer.selectFeatures(query,esri.layers.FeatureLayer.SELECTION_NEW, lang.hitch(this, this.newprselect))
+		
+		this.restrictGeography();
 		
 		
-		
-  this.relPane = new FloatingPane({
-     title: "Related Content",
-     resizable: true, dockable: true,
-     style: "position:absolute;top:0px;left:0px;width:170px;height:200px;visibility:hidden;closable:false",
-     id: "pFloatingPane"
-  }, dojo.byId("related"));
+		  
+			  this.relPane = new FloatingPane({
+				 title: "Related Content",
+				 resizable: true, dockable: true, closable: false,
+				 style: "position:absolute;top:100px;left:2000px;width:220px;height:200px;closable:false;z-index:9000;",  //;visibility:hidden
+				 id: "pFloatingPane"
+			  }, dojo.byId("related"));
 
-  this.relPane.startup();
+			  this.relPane.startup();
+
+				this.legPane = new FloatingPane({
+				 title: "Legend",
+				 resizable: true, dockable: true, closable: false,
+				 style: "position:absolute;top:0px;left:2000px;width:220px;height:220px;closable:false;z-index:9000;",  //;visibility:hidden
+				 id: "pFloatingPaneLeg"
+			  }, dojo.byId("legendDiv"));
+
+			  this.legPane.startup();
+  
+
+		  	  this.legend = new Legend({
+				map:this.map,
+				layerInfos:[{layer:this.prlayer,title:'Projects'}] 
+				},"legend");
+			  this.legend.startup();
+			
 		
+			  this.collapse();
+			  
+			  	fs = dom.byId("fsbut");
 		
-			 
+				on(fs, "click", lang.hitch(this,this.fullscreen))
+				
+				
+				on(document, "keyup", lang.hitch(this,function(event) {
+				console.log(event)
+					if (event.keyCode == 27) {
+					  this.collapse();
+					  
+					}
+				}));
+				
+			  on(window, 'resize', lang.hitch(this,function() { 
+			  
+					if (this.inFullscreen == true) {
+					
+						this.fullscreen();
+					
+					} else {
+					
+						this.collapse();
+					
+					}
+					
+					}))
+			  
 		   },
+		   
+		  fullscreen: function() {
+		 
+		  
+			win.scrollIntoView("vt");
+		  
+			vs = win.getBox();
+		  
+		  	domStyle.set("fsstuff", "top", "0px");
+			domStyle.set("fsstuff", "left", "0px");
+			domStyle.set("fsstuff", "width", (vs.w + 15) + "px");
+			domStyle.set("fsstuff", "height", vs.h + "px");
+			
+			domStyle.set("container", "height", 0 + "px");
+			domStyle.set("ssloc", "height", 0 + "px");
+			
+			domStyle.set("map", "height", (vs.h - 490) + "px");
+			
+			domStyle.set("pFloatingPane", "top", 5 + "px");
+			domStyle.set("pFloatingPane", "left", (vs.w - 285) + "px");			
+			
+			domStyle.set("pFloatingPaneLeg", "top", (vs.h - 490) - 260 + "px");
+			domStyle.set("pFloatingPaneLeg", "left", 5 + "px");		
+				
+				
+	        this.map.reposition()
+	        this.map.resize()	
+			this.map.reposition()
+			this.map.resize()
+
+			this.inFullscreen = true;
+		  
+		  
+		  },
+		  
+		  collapse: function() {
+		  
+		  
+		  	ss = domGeom.position("ssloc", true);
+			
+			domStyle.set("fsstuff", "width", "910px");
+			domStyle.set("fsstuff", "height", "1010px");
+			domStyle.set("fsstuff", "top", ss.y + "px");
+			domStyle.set("fsstuff", "left", ss.x + "px");
+			domStyle.set("map", "height", "510px");
+			
+			domStyle.set("container", "height", "");
+			domStyle.set("ssloc", "height", 1010 + "px");
+
+			this.map.reposition()
+			this.map.resize()			
+			this.map.reposition()
+
+			domStyle.set("pFloatingPane", "top", 5 + "px");
+			domStyle.set("pFloatingPane", "left", (ss.w - 285) + "px");			
+			
+			domStyle.set("pFloatingPaneLeg", "top", 245 + "px");
+			domStyle.set("pFloatingPaneLeg", "left", 5 + "px");		
+
+			this.inFullscreen = false;
+		  
+		  },
 		   
 		  restrictGeography: function() {
 		  
@@ -321,12 +433,12 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 				  
 				  for (kn in knartvals) {
 					  
-					  knout = knout + "&nbsp;&nbsp;&nbsp;&nbsp;<a href='http://imds.greenlitestaging.com/knowledge-network/" + kn + "' target='_blank'>" + knartvals[kn] + "</a><br>";
+					  knout = knout + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='http://imds.greenlitestaging.com/knowledge-network/" + kn + "' target='_blank'>" + knartvals[kn] + "</a><br>";
 				  }
 				  
 				  //alert(knout)
 				  
-				  relcontent = ("&bull;&nbsp;Related Knowledge Network Items:<br>&nbsp;&nbsp;<a href='http://imds.greenlitestaging.com/conceptual-model-search/search?keywords=&" + this.relinks +"' target='_blank'>Models & Collaboratives</a><br>&nbsp;&nbsp;Related Articles:<br>" + knout + "<a href='http://imds.greenlitestaging.com/data-catalog/search?keywords=&" + this.relinks +"' target='_blank'>Related Data Catalog Items</a><br><a href='http://imds.greenlitestaging.com/dynamic-maps-search/search?keywords=&" + this.relinks + "' target='_blank'>Related Dynamic Maps</a><br><a href='http://imds.greenlitestaging.com/decision-tools-search/search?keywords=&" + this.relinks + "' target='_blank'>Related Decision Tools</a> <br> <br>") 
+				  relcontent = ("&bull;&nbsp;Related Knowledge Network Items:<br>&nbsp;&nbsp;&nbsp;<a href='http://imds.greenlitestaging.com/conceptual-model-search/search?keywords=&" + this.relinks +"' target='_blank'>Models & Collaboratives</a><br>&nbsp;&nbsp;&nbsp;Related Articles:<br>" + knout + "&bull;&nbsp;<a href='http://imds.greenlitestaging.com/data-catalog/search?keywords=&" + this.relinks +"' target='_blank'>Related Data Catalog Items</a><br>&bull;&nbsp;<a href='http://imds.greenlitestaging.com/dynamic-maps-search/search?keywords=&" + this.relinks + "' target='_blank'>Related Dynamic Maps</a><br>&bull;&nbsp;<a href='http://imds.greenlitestaging.com/decision-tools-search/search?keywords=&" + this.relinks + "' target='_blank'>Related Decision Tools</a> <br> <br>") 
 				  
 				  dom.byId("relatedcontent").innerHTML = relcontent;
 				 
@@ -335,7 +447,16 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		  
 		  newprselect: function(f,sm) {
 		  
-	
+		  
+		  if (this.firstload == true) {
+		  
+			this.firstload = false;
+		  
+		  
+		  }
+		  
+			this.legend.refresh();
+			
 		   data = []
 		   
 		   totalm = 0
@@ -492,8 +613,8 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 			}));
 			 
 			 
-			 node = dom.byId(this.outputid);
-			 dojo.empty(node);
+			 //node = dom.byId(this.outputid);
+			 //dojo.empty(node);
 			 
 
 			 this.featureLayer.clearSelection();
