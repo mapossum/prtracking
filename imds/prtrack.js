@@ -1,7 +1,7 @@
 //, summarizebyunit
 
-define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo/text!./templates/prtrack.html", "dojo/dom-style", "dojo/dom-class", "dojo/_base/fx", "dojo/_base/kernel", "dojo/_base/lang", "dojo/on", "dojo/mouse", "dojo/query", "dojo/store/Memory", "dijit/form/ComboBox", "dijit/form/DropDownButton", "dijit/DropDownMenu", "dijit/MenuItem", "dojo/dom", "dojo/parser", "dojo/query", "dijit/registry", "dijit/layout/TabContainer", "dijit/layout/ContentPane", "dojo/dom-construct", "dijit/form/Button", "dijit/CheckedMenuItem", "dojo/_base/array", "dgrid/Grid", "dojo/store/Memory", "dgrid/OnDemandGrid", "dgrid/extensions/ColumnResizer","dojo/dom-geometry", "dojox/layout/FloatingPane", "esri/dijit/Legend", "dojo/window"],
-    function(declare, WidgetBase, TemplatedMixin, template, domStyle, domClass, baseFx, dojo, lang, on, mouse, query, Memory, ComboBox, DropDownButton, DropDownMenu, MenuItem, dom, parser, dq, registry, TabContainer, ContentPane, domConstruct, Button, CheckedMenuItem, array, Grid, Memory, OnDemandGrid, ColumnResizer, domGeom, FloatingPane, Legend, win){
+define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo/text!./templates/prtrack.html", "dojo/dom-style", "dojo/dom-class", "dojo/_base/fx", "dojo/_base/kernel", "dojo/_base/lang", "dojo/on", "dojo/mouse", "dojo/query", "dojo/store/Memory", "dijit/form/ComboBox", "dijit/form/DropDownButton", "dijit/DropDownMenu", "dijit/MenuItem", "dojo/dom", "dojo/parser", "dojo/query", "dijit/registry", "dijit/layout/TabContainer", "dijit/layout/ContentPane", "dojo/dom-construct", "dijit/form/Button", "dijit/CheckedMenuItem", "dojo/_base/array", "dgrid/Grid", "dojo/store/Memory", "dgrid/OnDemandGrid", "dgrid/extensions/ColumnResizer","dojo/dom-geometry", "dojox/layout/FloatingPane", "esri/dijit/Legend", "dojo/window", "dgrid/util/touch", "dgrid/Selection", "dgrid/extensions/ColumnHider"],
+    function(declare, WidgetBase, TemplatedMixin, template, domStyle, domClass, baseFx, dojo, lang, on, mouse, query, Memory, ComboBox, DropDownButton, DropDownMenu, MenuItem, dom, parser, dq, registry, TabContainer, ContentPane, domConstruct, Button, CheckedMenuItem, array, Grid, Memory, OnDemandGrid, ColumnResizer, domGeom, FloatingPane, Legend, win, touchUtil, Selection, ColumnHider){
         return declare([WidgetBase, TemplatedMixin], {
             // Some default values for our author
             // These typically map to whatever you're handing into the constructor
@@ -168,20 +168,22 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
           fillSymbol: new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([255,0,0]), 2), new dojo.Color([255,100,0,0.25]))
         }, dojo.create("div"));
        
-       dojo.addClass(this.map.infoWindow.domNode, "myTheme");
+       //dojo.addClass(this.map.infoWindow.domNode, "myTheme");
 		
-		popupTemplate = new esri.dijit.PopupTemplate({
-          title: "<br>{title}",
-          description: "<img src='{photo}' width=220/><br>{desc}<br><br><a href='http://imds.greenlitestaging.com/project-tracking/{nid}' target='_blank' >Click For More Info</a>",
-          showAttachments:false
-        });
+		//popupTemplate = new esri.dijit.InfoTemplate({
+        //  title: "{title}",
+        //  content: "<img src='{photo}' width=220/><br>{desc}<br><a href='http://imds.greenlitestaging.com/project-tracking/{nid}' target='_blank' >Click For More Info</a>",
+        //  showAttachments:false
+        //});
         
-        this.map.infoWindow = popup;
+		
+		this.map.infoWindow.resize(300,350);
+        //this.map.infoWindow = popup;
 		
         //create a feature layer based on the feature collection
         this.prlayer = new esri.layers.FeatureLayer("http://tnc.usm.edu/ArcGIS/rest/services/IMDS/ProjectTracking/MapServer/0",{
 	        mode: esri.layers.FeatureLayer.MODE_SELECTION,
-	        infoTemplate: popupTemplate,//new esri.InfoTemplate("<br><a href='http://tnc.greenlitestaging.com/project-tracking/${nid}' target='_blank' >${title}</a>","${body}"),
+	        infoTemplate: new esri.InfoTemplate("${title}","<img src='${photo}' width=220/><br>${desc}<br><a href='http://imds.greenlitestaging.com/project-tracking/${nid}' target='_blank' >Click For More Info</a>"),
 	        outFields: ["*"]
 	       });
 		  
@@ -254,7 +256,14 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		   },
 		   
 		  fullscreen: function() {
+		  
+		    
 		 
+			cex = this.map.extent;
+			
+			lex = this.map.getLevel()
+		  
+			//alert(cex);
 		  
 			win.scrollIntoView("vt");
 		  
@@ -283,11 +292,17 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 			this.map.resize()
 
 			this.inFullscreen = true;
+			
+			
+			this.map.setExtent(cex,false)
+		
 		  
 		  
 		  },
 		  
 		  collapse: function() {
+		  
+		    cex = this.map.extent;
 		  
 		  
 		  	ss = domGeom.position("ssloc", true);
@@ -301,17 +316,22 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 			domStyle.set("container", "height", "");
 			domStyle.set("ssloc", "height", 1010 + "px");
 
-			this.map.reposition()
-			this.map.resize()			
-			this.map.reposition()
-
 			domStyle.set("pFloatingPane", "top", 5 + "px");
 			domStyle.set("pFloatingPane", "left", (ss.w - 285) + "px");			
 			
 			domStyle.set("pFloatingPaneLeg", "top", 245 + "px");
-			domStyle.set("pFloatingPaneLeg", "left", 5 + "px");		
+			domStyle.set("pFloatingPaneLeg", "left", 5 + "px");	
+
+			this.map.reposition()
+			this.map.resize()			
+			this.map.reposition()
+			
 
 			this.inFullscreen = false;
+			
+			
+			this.map.setExtent(cex,false)
+			
 		  
 		  },
 		   
@@ -457,7 +477,7 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		  
 			this.legend.refresh();
 			
-		   data = []
+		   this.data = []
 		   
 		   totalm = 0
 		   
@@ -466,7 +486,7 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 			atts = feat.attributes;
 			shortd = dojo.eval(atts.field_pt_short_description);
 			desc = shortd[0].value;
-			data.push({title:atts.title,"Project_Status":atts.Project_Status,field_pt_short_description:desc});
+			this.data.push({title:atts.title,"Project_Status":atts.Project_Status,field_pt_short_description:desc,nid:atts.nid});
 					
 					 
 			//console.log(feat.attributes["field_branding_photo"])
@@ -497,9 +517,17 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		   }));
 		  
 		    //var store = new Memory({ data: data });
+		
+		if (this.grid != undefined) {
+			this.grid.destroy( true ); 
+		}
          
+		node = domConstruct.toDom('<div id="gridloc" style="width:100%;height:330px"></div>')
+		domConstruct.place(node, "fsstuff", "last");
+		 
         // Create an instance of OnDemandGrid referencing the store
-			var grid = new (declare([Grid, ColumnResizer]))({
+			this.grid = new (declare([Grid, ColumnResizer, Selection, ColumnHider]))({
+				selectionMode: "single",
 				//store: store,
 				columns: {
 					title: {
@@ -513,13 +541,51 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 					Project_Status:  {
 						label: "Status",
 						resizable: true
+					},
+					nid:  {
+						label: "ID",
+						hidden: true
 					}
 					
 				}
-			}, "grid");
+			}, "gridloc");
      
 
-			grid.renderArray(data);
+			this.grid.renderArray(this.data);
+			
+			this.grid.on("dgrid-select", lang.hitch(this,function(event){
+				
+				// Get the rows that were just selected
+				rows = event.rows;
+				console.log(rows[0].data);
+				
+				nidtest = rows[0].data.nid;
+		
+				recs = this.prlayer.getSelectedFeatures()
+		
+				array.forEach(recs, lang.hitch(this, function(r, index) {
+					if (nidtest == r.attributes.nid) {
+						console.log(r.attributes.nid);
+						console.log(this.map.infoWindow);
+						//this.map.infoWindow.setFeatures([r]);
+						this.map.infoWindow.show(r.geometry);
+					}
+				}));
+        
+			
+			}));
+		
+
+			
+			//on(this.grid, "click", function(event){
+			//	//row = grid.row(event);
+			//	console.log(event)
+			//});
+			
+			//this.grid.on(touchUtil.selector(".dgrid-row", touchUtil.tap), function(event){
+			//	row = grid.row(event);
+			//	alert(row)
+			//});
 		  
 		
 			if (f.length > 0) {
