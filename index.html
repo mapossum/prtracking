@@ -9,12 +9,12 @@
 <link rel="shortcut icon" href="http://www.imds.greenlitestaging.com/sites/all/themes/tnc/favicon.ico" type="image/x-icon" />
   <title>Project Tracking | The Nature Conservancy IMDS Project</title>
   
-  	<link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/dojo/dijit/themes/claro/claro.css">
-    <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/esri/css/esri.css">	
-	<link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/dgrid/css/dgrid.css">
-	<link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/dgrid/css/skins/claro.css">
-	<link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/dojo/dojox/layout/resources/FloatingPane.css">
-	<link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/dojo/dojox/layout/resources/ResizeHandle.css">
+  	<link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/dojo/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/esri/css/esri.css">	
+	<link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/dgrid/css/dgrid.css">
+	<link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/dgrid/css/skins/claro.css">
+	<link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/dojo/dojox/layout/resources/FloatingPane.css">
+	<link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/dojo/dojox/layout/resources/ResizeHandle.css">
     <link rel="stylesheet" href="resources/css/cr.css">
 	
 	<style>
@@ -148,7 +148,7 @@ $(document).ready(function() {$('#back-top').css('right','40px');$('#back-top .i
     </script>
 
 
-	<script src="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/"></script>
+	<script src="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/"></script>
 	
 	<script type="text/javascript" src="http://extjs-public.googlecode.com/svn/tags/extjs-4.1.1a/release/ext-all-debug.js"></script>
 
@@ -181,7 +181,7 @@ $(document).ready(function() {$('#back-top').css('right','40px');$('#back-top .i
 				"dojo/dom-geometry",
         		"imds/prtrack"
             ], function (
-                esrimap,
+                eMap,
                 esriFeatureLayer,
                 esriLegend,
 				esriPopop,
@@ -200,7 +200,7 @@ $(document).ready(function() {$('#back-top').css('right','40px');$('#back-top .i
 		 
 		 parser.parse();
       
-        var map = new esri.Map("map",{
+        map = new eMap("map",{
           basemap:"topo",
           center:[-85,45], //long, lat
           zoom:5,
@@ -209,6 +209,7 @@ $(document).ready(function() {$('#back-top').css('right','40px');$('#back-top .i
         });
         
         dojo.connect(map, "onLoad", function() {
+		
 	        //map.showPanArrows();
 	        map.enablePan();
 	        
@@ -218,9 +219,7 @@ $(document).ready(function() {$('#back-top').css('right','40px');$('#back-top .i
 			sarea = dom.byId("controls");
 			var widget = new prtrack({"name":"George",map:map, outputid:'statarea'}).placeAt(sarea);
 			widget.startup();
-			
-			
-  
+
 			
 	        });
         
@@ -259,6 +258,7 @@ $(document).ready(function() {$('#back-top').css('right','40px');$('#back-top .i
   </head>
   <body id="top" class="lightbox-processed claro">
   <span id="vt"></span>
+  <div id="csbut" style="position:absolute;z-index:10000;top:10px;left:60px;background-color:#fff;display:none">&nbsp;Press Escape or here to exit fullscreen view&nbsp;<!--<img id="csbut" src="resources/images/full_screen.png" width=30 >--></div>
 	<div id="header">
 		<div class="inner_container">
         <div id="logo">
@@ -330,7 +330,7 @@ $(document).ready(function() {$('#back-top').css('right','40px');$('#back-top .i
           <div class="main_content">
             <div id="node-584" class="node">
               <div class="content clear-block"></div>
-              	<div> <h2 style="display: inline;color:#000"> This map looks best in Full Screen.  Click the button to go full screen mode.  </h2> <img id="fsbut" src="resources/images/full_screen.png" width=30/ style="padding-top:10px"></div>
+              	<div> <h2 style="display: inline;color:#000"> This map looks best in Full Screen.  Click the button to go full screen mode.  </h2> <img id="fsbut" src="resources/images/full_screen.png" width=30 style="padding-top:10px"></div>
 				
 				<div id="ssloc" style='width:920px;height:1010px' >
 

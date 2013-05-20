@@ -1,7 +1,7 @@
 //, summarizebyunit
 
-define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo/text!./templates/prtrack.html", "dojo/dom-style", "dojo/dom-class", "dojo/_base/fx", "dojo/_base/kernel", "dojo/_base/lang", "dojo/on", "dojo/mouse", "dojo/query", "dojo/store/Memory", "dijit/form/ComboBox", "dijit/form/DropDownButton", "dijit/DropDownMenu", "dijit/MenuItem", "dojo/dom", "dojo/parser", "dojo/query", "dijit/registry", "dijit/layout/TabContainer", "dijit/layout/ContentPane", "dojo/dom-construct", "dijit/form/Button", "dijit/CheckedMenuItem", "dojo/_base/array", "dgrid/Grid", "dojo/store/Memory", "dgrid/OnDemandGrid", "dgrid/extensions/ColumnResizer","dojo/dom-geometry", "dojox/layout/FloatingPane", "esri/dijit/Legend", "dojo/window", "dgrid/util/touch", "dgrid/Selection", "dgrid/extensions/ColumnHider"],
-    function(declare, WidgetBase, TemplatedMixin, template, domStyle, domClass, baseFx, dojo, lang, on, mouse, query, Memory, ComboBox, DropDownButton, DropDownMenu, MenuItem, dom, parser, dq, registry, TabContainer, ContentPane, domConstruct, Button, CheckedMenuItem, array, Grid, Memory, OnDemandGrid, ColumnResizer, domGeom, FloatingPane, Legend, win, touchUtil, Selection, ColumnHider){
+define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo/text!./templates/prtrack.html", "dojo/dom-style", "dojo/dom-class", "dojo/_base/fx", "dojo/_base/kernel", "dojo/_base/lang", "dojo/on", "dojo/mouse", "dojo/query", "dojo/store/Memory", "dijit/form/ComboBox", "dijit/form/DropDownButton", "dijit/DropDownMenu", "dijit/MenuItem", "dojo/dom", "dojo/parser", "dojo/query", "dijit/registry", "dijit/layout/TabContainer", "dijit/layout/ContentPane", "dojo/dom-construct", "dijit/form/Button", "dijit/CheckedMenuItem", "dojo/_base/array", "dgrid/Grid", "dojo/store/Memory", "dgrid/OnDemandGrid", "dgrid/extensions/ColumnResizer","dojo/dom-geometry", "dojox/layout/FloatingPane", "esri/dijit/Legend", "dojo/window", "dgrid/util/touch", "dgrid/Selection", "dgrid/extensions/ColumnHider", "esri/layers/ArcGISDynamicMapServiceLayer", "esri/layers/FeatureLayer", "dojo/io-query"],
+    function(declare, WidgetBase, TemplatedMixin, template, domStyle, domClass, baseFx, dojo, lang, on, mouse, query, Memory, ComboBox, DropDownButton, DropDownMenu, MenuItem, dom, parser, dq, registry, TabContainer, ContentPane, domConstruct, Button, CheckedMenuItem, array, Grid, Memory, OnDemandGrid, ColumnResizer, domGeom, FloatingPane, Legend, win, touchUtil, Selection, ColumnHider, ArcGISDynamicMapServiceLayer, FeatureLayer, ioQuery){
         return declare([WidgetBase, TemplatedMixin], {
             // Some default values for our author
             // These typically map to whatever you're handing into the constructor
@@ -57,35 +57,48 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		    
 
 		  		 parser.parse();
-				 
+
+		    	inq = window.location.search.substring(1), true;
+		
+				pageParameters = ioQuery.queryToObject(inq);
+				
+				if (pageParameters.level == undefined) {pageParameters.level = 2}
+				
+				console.log(pageParameters)
+		
+			
+		
 				 
 				   this.clearButton = new Button({
             label: "Clear Selection",
             onClick: lang.hitch(this,this.clearall)
         }, "Cselect");
         
+		
+		DDlabs = {1: "Entire Great Lakes Basin", 2: "Individual Lake Drainage Basins", 3: "Subwatersheds"}
+		
         var menu2 = new DropDownMenu({ style: "display: none;"});
         var menuItem12 = new MenuItem({
             label: "Entire Great Lakes Basin",
-            onClick: lang.hitch(this,this.changelevel, 1, "Entire Great Lakes Basin")
+            onClick: lang.hitch(this,this.changelevel, 1, DDlabs[1])
         });
         menu2.addChild(menuItem12);
 
         var menuItem22 = new MenuItem({
             label: "Individual Lake Drainage Basins",
-            onClick: lang.hitch(this,this.changelevel, 2, "Individual Lake Drainage Basins")
+            onClick: lang.hitch(this,this.changelevel, 2, DDlabs[2])
             
         });
         menu2.addChild(menuItem22);
         
         var menuItem23 = new MenuItem({
             label: "Subwatersheds",
-            onClick: lang.hitch(this,this.changelevel, 3, "Subwatersheds")
+            onClick: lang.hitch(this,this.changelevel, 3, DDlabs[3])
         });
         menu2.addChild(menuItem23);
 
         var button2 = new DropDownButton({
-            label: "Individual Lake Drainage Basins",
+            label: DDlabs[pageParameters.level],
             name: "programmatic2",
             dropDown: menu2,
             id: "LevelButton"
@@ -95,8 +108,26 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		 allchecks = dq(".taxaCheck");
 		 
 		 array.forEach(allchecks, lang.hitch(this,function(entry, i) {
+		 
 				mywidget = registry.byNode(entry);
 				a = mywidget.get("value");
+				
+				if (pageParameters.taxa != undefined) {
+					taxa = pageParameters.taxa.split(",");
+					for (i in taxa) {
+				
+					t = taxa[i]
+					if (a == t) {
+					
+						mywidget.set("checked", true);
+					
+					}
+				
+			
+					}
+				}
+		 
+				
 				on(mywidget, "change", lang.hitch(this,this.restrictGeography));
 			}));
 
@@ -113,12 +144,14 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 			 this.map.reposition();
 			 
 			 this.inherited(arguments);
+			 
+		
 			
-		this.maplayer = new esri.layers.ArcGISDynamicMapServiceLayer("http://tnc.usm.edu/ArcGIS/rest/services/IMDS/ProjectTracking/MapServer");
+		this.maplayer = new ArcGISDynamicMapServiceLayer("http://tnc.usm.edu/ArcGIS/rest/services/IMDS/ProjectTracking/MapServer");
 		this.maplayer.setOpacity(0.6)	
 		this.maplayer.setVisibleLayers([1])
 		layerDefinitions = [];
-		layerDefinitions[1] = "Level = 2";
+		layerDefinitions[1] = "Level = " + pageParameters.level;
 		this.maplayer.setLayerDefinitions(layerDefinitions);	
         this.map.addLayer(this.maplayer);
 		
@@ -126,8 +159,8 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		var wsrenderer = new esri.renderer.SimpleRenderer(new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID,new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_NULL,new dojo.Color([0,0,0]), 0),new dojo.Color([255, 0, 0, 0.3])));
 		
 		
-		this.featureLayer = new esri.layers.FeatureLayer("http://tnc.usm.edu/ArcGIS/rest/services/IMDS/ProjectTracking/MapServer/1",{
-          mode: esri.layers.FeatureLayer.MODE_SELECTION,
+		this.featureLayer = new FeatureLayer("http://tnc.usm.edu/ArcGIS/rest/services/IMDS/ProjectTracking/MapServer/1",{
+          mode: FeatureLayer.MODE_SELECTION,
          outFields: ["*"]
         });
 		
@@ -137,14 +170,7 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		
 	
         this.map.addLayer(this.featureLayer);
-        
-        
-        thing = this
-		query = new esri.tasks.Query();
-		query.where = "Level = 2";
-		//this.featureLayer.selectFeatures(query,esri.layers.FeatureLayer.SELECTION_NEW,function(f,sm) {thing.featureSelector(f,sm,thing)});
-        
-       
+		
 		
 		thing = this;
 		this.clickhandle = dojo.connect(this.map,"onClick", this.genreport, thing);
@@ -157,32 +183,12 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		this.initExtent.push(initExtent);
 		this.initExtent.push(initExtent);
 		this.initExtent.push(new esri.geometry.Extent({"xmin":-90,"ymin":40,"xmax":-85,"ymax":48,"spatialReference":{"wkid":4326}}));
+
 		
-			 //on(closebuts[0], "click", lang.hitch(this,this._close));
-			 
-			 //this.tool = new this.tooltype({"name":"George",map:this.map});
-			 //this.tool.placeAt(this.domNode);
-		     //this.tool.startup();
-		
-		popup = new esri.dijit.Popup({
-          fillSymbol: new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([255,0,0]), 2), new dojo.Color([255,100,0,0.25]))
-        }, dojo.create("div"));
-       
-       //dojo.addClass(this.map.infoWindow.domNode, "myTheme");
-		
-		//popupTemplate = new esri.dijit.InfoTemplate({
-        //  title: "{title}",
-        //  content: "<img src='{photo}' width=220/><br>{desc}<br><a href='http://imds.greenlitestaging.com/project-tracking/{nid}' target='_blank' >Click For More Info</a>",
-        //  showAttachments:false
-        //});
-        
-		
-		this.map.infoWindow.resize(300,350);
-        //this.map.infoWindow = popup;
 		
         //create a feature layer based on the feature collection
-        this.prlayer = new esri.layers.FeatureLayer("http://tnc.usm.edu/ArcGIS/rest/services/IMDS/ProjectTracking/MapServer/0",{
-	        mode: esri.layers.FeatureLayer.MODE_SELECTION,
+        this.prlayer = new FeatureLayer("http://tnc.usm.edu/ArcGIS/rest/services/IMDS/ProjectTracking/MapServer/0",{
+	        mode: FeatureLayer.MODE_SELECTION,
 	        infoTemplate: new esri.InfoTemplate("${title}","<img src='${photo}' width=220/><br>${desc}<br><a href='http://imds.greenlitestaging.com/project-tracking/${nid}' target='_blank' >Click For More Info</a>"),
 	        outFields: ["*"]
 	       });
@@ -190,14 +196,51 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 
 		this.map.addLayers([this.prlayer]);
 		
-		//query = new esri.tasks.Query();
-		//query.where = "OBJECTID > -1";
-		//this.prlayer.selectFeatures(query,esri.layers.FeatureLayer.SELECTION_NEW, lang.hitch(this, this.newprselect))
+		this.prlayer.on("click", lang.hitch(this,function(evt) {
+			
+			
+			for (var i=0; i<this.data.length; i++)
+			{
+				a = (this.grid.row(i))
+				
+				
+				if (a.data.nid == evt.graphic.attributes.nid) {
+				console.log(a.data.nid);
+				console.log(evt.graphic.attributes.nid);
+				   this.map.infoWindow.hide()
+				   this.grid.clearSelection()
+				   this.grid.select(a)
+				}
+			}
+			
+			
+          
+        }));
 		
-		this.restrictGeography();
-		
-		
+		if (pageParameters.units != undefined) {
+		 ids = pageParameters.units.split(",");
 		  
+	      qr = new esri.tasks.Query();
+		  
+		  wheres = []
+		  for (id in ids) {
+			  
+			  wheres.push("ObjectID = " + ids[id]);
+			  
+			  
+		  }
+		  
+		  outwhere = wheres.join(" OR ")
+		  
+          qr.where = outwhere; 
+		
+         this.featureLayer.selectFeatures(qr,FeatureLayer.SELECTION_NEW, lang.hitch(this, this.restrictGeography));
+		}
+
+		this.restrictGeography();
+			
+			  
+			  
 			  this.relPane = new FloatingPane({
 				 title: "Related Content",
 				 resizable: true, dockable: true, closable: false,
@@ -226,6 +269,14 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		
 			  this.collapse();
 			  
+			  
+			  csbut
+			  
+			  cs = dom.byId("csbut");
+		
+				on(cs, "click", lang.hitch(this,this.collapse))
+				
+				
 			  	fs = dom.byId("fsbut");
 		
 				on(fs, "click", lang.hitch(this,this.fullscreen))
@@ -257,18 +308,18 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		   
 		  fullscreen: function() {
 		  
-		    
-		 
-			cex = this.map.extent;
 			
-			lex = this.map.getLevel()
+			//lex = this.map.getLevel()
 		  
 			//alert(cex);
+			
+			cex = this.map.extent;
 		  
 			win.scrollIntoView("vt");
 		  
 			vs = win.getBox();
 		  
+			domStyle.set("csbut", "display", "");
 		  	domStyle.set("fsstuff", "top", "0px");
 			domStyle.set("fsstuff", "left", "0px");
 			domStyle.set("fsstuff", "width", (vs.w + 15) + "px");
@@ -286,15 +337,14 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 			domStyle.set("pFloatingPaneLeg", "left", 5 + "px");		
 				
 				
-	        this.map.reposition()
-	        this.map.resize()	
+
+	        this.map.resize(true)	
 			this.map.reposition()
-			this.map.resize()
 
 			this.inFullscreen = true;
 			
 			
-			this.map.setExtent(cex,false)
+			this.map.centerAt(cex.getCenter())
 		
 		  
 		  
@@ -307,6 +357,7 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		  
 		  	ss = domGeom.position("ssloc", true);
 			
+			domStyle.set("csbut", "display", "none");
 			domStyle.set("fsstuff", "width", "910px");
 			domStyle.set("fsstuff", "height", "1010px");
 			domStyle.set("fsstuff", "top", ss.y + "px");
@@ -322,21 +373,21 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 			domStyle.set("pFloatingPaneLeg", "top", 245 + "px");
 			domStyle.set("pFloatingPaneLeg", "left", 5 + "px");	
 
-			this.map.reposition()
-			this.map.resize()			
+			this.map.resize(true)			
 			this.map.reposition()
 			
 
 			this.inFullscreen = false;
 			
 			
-			this.map.setExtent(cex,false)
+			this.map.centerAt(cex.getCenter())
 			
 		  
 		  },
 		   
 		  restrictGeography: function() {
 		  
+				this.map.infoWindow.hide();
 				
 				selfeats = this.featureLayer.getSelectedFeatures();		
 				
@@ -557,7 +608,7 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 				
 				// Get the rows that were just selected
 				rows = event.rows;
-				console.log(rows[0].data);
+				//console.log(rows[0].data);
 				
 				nidtest = rows[0].data.nid;
 		
@@ -566,9 +617,12 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 				array.forEach(recs, lang.hitch(this, function(r, index) {
 					if (nidtest == r.attributes.nid) {
 						console.log(r.attributes.nid);
-						console.log(this.map.infoWindow);
-						//this.map.infoWindow.setFeatures([r]);
+						//console.log(this.map.infoWindow);
+						this.map.infoWindow.hide()
+						//this.grid.clearSelection()
+						this.map.infoWindow.setFeatures([r]);
 						this.map.infoWindow.show(r.geometry);
+						this.map.centerAt(r.geometry)
 					}
 				}));
         
@@ -632,7 +686,6 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		   
 		 genreport: function(evt) {
 	
-		
 	      var query = new esri.tasks.Query();
 		  
 		  toleranceInPixel = 1;
