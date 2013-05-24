@@ -267,10 +267,10 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 			  this.legend.startup();
 			
 		
-			  this.collapse();
+			  this.collapse2();
 			  
 			  
-			  csbut
+			  //csbut
 			  
 			  cs = dom.byId("csbut");
 		
@@ -347,6 +347,41 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 			this.map.centerAt(cex.getCenter())
 		
 		  
+		  
+		  },
+		  
+		  collapse2: function() {
+		  
+		    cex = this.map.extent;
+		  
+		  
+		  	ss = domGeom.position("ssloc", true);
+			
+			//domStyle.set("csbut", "display", "none");
+			//domStyle.set("fsstuff", "width", "915px");
+			//domStyle.set("fsstuff", "height", "1010px");
+			domStyle.set("fsstuff", "top", ss.y + "px");
+			domStyle.set("fsstuff", "left", ss.x + "px");
+			//domStyle.set("map", "height", "510px");
+			
+			//domStyle.set("container", "height", "");
+			//domStyle.set("ssloc", "height", 1010 + "px");
+
+			//domStyle.set("pFloatingPane", "top", 5 + "px");
+			//domStyle.set("pFloatingPane", "left", (ss.w - 285) + "px");			
+			
+			//domStyle.set("pFloatingPaneLeg", "top", 245 + "px");
+			//domStyle.set("pFloatingPaneLeg", "left", 5 + "px");	
+
+			this.map.resize(true)			
+			this.map.reposition()
+			
+
+			this.inFullscreen = false;
+			
+			
+			this.map.centerAt(cex.getCenter())
+			
 		  
 		  },
 		  
@@ -576,7 +611,7 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		}
          
 		node = domConstruct.toDom('<div id="gridloc" style="width:100%;height:330px"></div>')
-		domConstruct.place(node, "fsstuff", "last");
+		domConstruct.place(node, "gsstuff", "last");
 		 
         // Create an instance of OnDemandGrid referencing the store
 			this.grid = new (declare([Grid, ColumnResizer, Selection, ColumnHider]))({

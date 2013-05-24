@@ -191,7 +191,7 @@ $(document).ready(function() {$('#back-top').css('right','40px');$('#back-top .i
 				"dojo/on",
 				"dojo/dom-style",
 				"dojo/dom-geometry",
-        		"imds/prtrack"
+        		"imds/prtrack_split"
             ], function (
                 eMap,
                 esriFeatureLayer,
@@ -210,9 +210,36 @@ $(document).ready(function() {$('#back-top').css('right','40px');$('#back-top .i
             
             
          function init() {
-		 
-		 
-      
+		              
+	bc = new BorderContainer({
+        style: "width:920px;height:1010px;background-color:#FFF;padding:0px;margin:0;overflow:hidden;",
+		liveSplitters:true,
+		gutters:true,
+    });
+
+    // create a ContentPane as the left pane in the BorderContainer
+    var cp1 = new ContentPane({
+        region: "center",
+        style: " width: 920px;padding:0px;border:0px;margin:0;overflow:hidden;",
+        content: "<div id='map' style='width:920px;height:300px;border-style:solid;border-width:1px;z-index:10000;' class='claro'><div id='related'><span id='relatedcontent'></span></div><div id='legendDiv'><span id='legend'></span></div></div><div id='controls' style='width:100%;height:500px;padding-top:10px'></div><div id='statarea' style='width:100%;height:20px'></div>",
+		splitter:true
+    });
+    bc.addChild(cp1);
+
+    // create a ContentPane as the center pane in the BorderContainer
+    var cp2 = new ContentPane({
+        region: "bottom",
+		style: "padding:0px;border:0px",
+		id: "bottompane",
+        content: "<div id='gsstuff'></div>",
+		splitter:true
+    });
+    bc.addChild(cp2);
+
+    // put the top level widget into the document, and then call startup()
+    bc.placeAt("fsstuff");
+    bc.startup();
+		
         map = new eMap("map",{
           basemap:"topo",
           center:[-85,45], //long, lat
@@ -220,7 +247,8 @@ $(document).ready(function() {$('#back-top').css('right','40px');$('#back-top .i
           //nav:true,
           sliderStyle:"small"
         });
-        
+
+		
         dojo.connect(map, "onLoad", function() {
 		
 	        //map.showPanArrows();
@@ -359,16 +387,10 @@ $(document).ready(function() {$('#back-top').css('right','40px');$('#back-top .i
 			
 				<div id="fsstuff" style='position:absolute;top:0px;left:-20000px;width:920px;height:1010px;background-color:#FFF' > 
 				
-				<div id="map" style='width:100%;height:50%;border-style:solid;border-width:1px;z-index:10000;' class="claro"> 
-				
-					<div id="related"><span id="relatedcontent"></span></div>
-					<div id="legendDiv"><span id="legend"></span></div>
-					
-				</div>
 				
 				
-				<div id="controls" style='width:100%;height:115px;padding-top:10px'></div>
-				<div id="statarea" style='width:100%;height:20px'></div>
+				
+				
 				
 				
 			

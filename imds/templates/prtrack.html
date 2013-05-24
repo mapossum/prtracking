@@ -1,5 +1,6 @@
 <div>
 
+
 <span style="color:black" id="LSelect">Select Geographic Extent: </span> &nbsp; &nbsp; &nbsp;
 <span id="Cselect">  </span>
  &nbsp; &nbsp;
@@ -14,7 +15,7 @@
 
 <div data-dojo-type="dijit/form/DropDownButton">
   <span>Status</span>
-  <div data-dojo-type="dijit/DropDownMenu"  style="display: none;" checked=true data-dojo-props="text:'Status'">
+  <div data-dojo-type="dijit/DropDownMenu"  style="display: none;" checked=true data-dojo-props="text:'Status', gg:'global'">
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" checked=true data-dojo-props="value: '75'">Completed</div>
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" checked=true data-dojo-props="value: '76'">In Progress (Funded)</div>
 	<div class="taxaCheck taxaStatus" data-dojo-type="dijit/CheckedMenuItem" checked=true data-dojo-props="value: '77'">In Progress (Needs Funding)</div>
@@ -27,7 +28,7 @@
 
 <div data-dojo-type="dijit/form/DropDownButton">
   <span>Area of Interest</span>
-  <div data-dojo-type="dijit/DropDownMenu"  style="display: none;" data-dojo-props="text:'Area of Interest', tid:'5'">
+  <div data-dojo-type="dijit/DropDownMenu"  style="display: none;" data-dojo-props="text:'Area of Interest', tid:'5', gg:'global'">
 	<div class="taxaCheck taxaInterest" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '68'">Land</div>
 	<div class="taxaCheck taxaInterest" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '69'">Urban</div>
 	<div class="taxaCheck taxaInterest" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '70'">Rural</div>
@@ -42,7 +43,7 @@
 
 <div data-dojo-type="dijit/form/DropDownButton">
   <span>Ecosystems</span>
-  <div data-dojo-type="dijit/DropDownMenu"  style="display: none;" data-dojo-props="text:'Ecosystems', tid:''">
+  <div data-dojo-type="dijit/DropDownMenu"  style="display: none;" data-dojo-props="text:'Ecosystems', tid:'', gg:'global'">
 	<div class="taxaCheck taxaEcosystems" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '83'">Inland Aquatic</div>
 	<div class="taxaCheck taxaEcosystems" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '106'">Watershed</div>
 	<div class="taxaCheck taxaEcosystems" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '8'">Coastal</div>
@@ -68,7 +69,7 @@
 
 <div data-dojo-type="dijit/form/DropDownButton">
   <span>Human Activities</span>
-  <div data-dojo-type="dijit/DropDownMenu"  style="display: none;" data-dojo-props="text:'Human Activities', tid:'3'">
+  <div data-dojo-type="dijit/DropDownMenu"  style="display: none;" data-dojo-props="text:'Human Activities', tid:'3', gg:'group'">
 	<div class="taxaCheck taxaHuman" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '107'">Land Use/Land Change</div>
 	<div class="taxaCheck taxaHuman" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '56'">Invasive Species</div>
 	<div class="taxaCheck taxaHuman" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '55'">Recreation/Tourism</div>
@@ -89,7 +90,7 @@
 
 <div data-dojo-type="dijit/form/DropDownButton">
   <span>Ecological Attribs.</span>
-  <div data-dojo-type="dijit/DropDownMenu"  style="display: none;" data-dojo-props="text:'Ecological Attribs', tid:'2'">
+  <div data-dojo-type="dijit/DropDownMenu"  style="display: none;" data-dojo-props="text:'Ecological Attribs', tid:'2', gg:'global'" >
 	<div class="taxaCheck taxaEcological" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '41'">Ecosystem Function or Process</div>
 	<div class="taxaCheck taxaEcological" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '44'">Natural Disturbance Regimes</div>
 	<div class="taxaCheck taxaEcological" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '40'">Chemical and Physical Factors</div>
@@ -105,7 +106,7 @@
 
 <div data-dojo-type="dijit/form/DropDownButton">
   <span>Taxa</span>
-  <div data-dojo-type="dijit/DropDownMenu"  style="display: none;" data-dojo-props="text:'Taxa', tid:'1'">
+  <div data-dojo-type="dijit/DropDownMenu"  style="display: none;" data-dojo-props="text:'Taxa', tid:'1', gg:'global'">
 	<div class="taxaCheck taxaTaxa" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '26'">Animals</div>
 	<div class="taxaCheck taxaTaxa" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '37'">Mammals</div>
 	<div class="taxaCheck taxaTaxa" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '36'">Birds</div>
@@ -114,7 +115,7 @@
 	<div class="taxaCheck taxaTaxa" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '33'">Fish</div>
 	<div class="taxaCheck taxaTaxa" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '22'">Aquatic Plants</div>
 	<div class="taxaCheck taxaTaxa" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '21'">Bryophytes (Mosses, Liverworts, Hornworts)</div>
-	<div class="taxaCheck taxaTaxa" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '22'">Ferns and Clubmosses</div>
+	<div class="taxaCheck taxaTaxa" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '20'">Ferns and Clubmosses</div>
 	<div class="taxaCheck taxaTaxa" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '30'">Terrestrial Invertebrates</div>
 	<div class="taxaCheck taxaTaxa" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '17'">Herbs</div>
 	<div class="taxaCheck taxaTaxa" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '16'">Vines</div>
@@ -132,7 +133,7 @@
 
 <div data-dojo-type="dijit/form/DropDownButton">
   <span>Conservation Strategies</span>
-  <div data-dojo-type="dijit/DropDownMenu"  style="display: none;" data-dojo-props="text:'Conservation Strategies', tid:'4'">
+  <div data-dojo-type="dijit/DropDownMenu"  style="display: none;" data-dojo-props="text:'Conservation Strategies', tid:'4', gg:'global'">
 	<div class="taxaCheck taxaConservation" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '60'">Species Management</div>
 	<div class="taxaCheck taxaConservation" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '58'">Protection</div>
 	<div class="taxaCheck taxaConservation" data-dojo-type="dijit/CheckedMenuItem" data-dojo-props="value: '63'">Legal Policies</div>
