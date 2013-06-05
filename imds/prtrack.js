@@ -1,7 +1,7 @@
 //, summarizebyunit
 
-define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo/text!./templates/prtrack.html", "dojo/dom-style", "dojo/dom-class", "dojo/_base/fx", "dojo/_base/kernel", "dojo/_base/lang", "dojo/on", "dojo/mouse", "dojo/query", "dojo/store/Memory", "dijit/form/ComboBox", "dijit/form/DropDownButton", "dijit/DropDownMenu", "dijit/MenuItem", "dojo/dom", "dojo/parser", "dojo/query", "dijit/registry", "dijit/layout/TabContainer", "dijit/layout/ContentPane", "dojo/dom-construct", "dijit/form/Button", "dijit/CheckedMenuItem", "dojo/_base/array", "dgrid/Grid", "dojo/store/Memory", "dgrid/OnDemandGrid", "dgrid/extensions/ColumnResizer","dojo/dom-geometry", "dojox/layout/FloatingPane", "esri/dijit/Legend", "dojo/window", "dgrid/util/touch", "dgrid/Selection", "dgrid/extensions/ColumnHider", "esri/layers/ArcGISDynamicMapServiceLayer", "esri/layers/FeatureLayer", "dojo/io-query"],
-    function(declare, WidgetBase, TemplatedMixin, template, domStyle, domClass, baseFx, dojo, lang, on, mouse, query, Memory, ComboBox, DropDownButton, DropDownMenu, MenuItem, dom, parser, dq, registry, TabContainer, ContentPane, domConstruct, Button, CheckedMenuItem, array, Grid, Memory, OnDemandGrid, ColumnResizer, domGeom, FloatingPane, Legend, win, touchUtil, Selection, ColumnHider, ArcGISDynamicMapServiceLayer, FeatureLayer, ioQuery){
+define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo/text!./templates/prtrack.html", "dojo/dom-style", "dojo/dom-class", "dojo/_base/fx", "dojo/_base/kernel", "dojo/_base/lang", "dojo/on", "dojo/mouse", "dojo/query", "dojo/store/Memory", "dijit/form/ComboBox", "dijit/form/DropDownButton", "dijit/DropDownMenu", "dijit/MenuItem", "dojo/dom", "dojo/parser", "dojo/query", "dijit/registry", "dijit/layout/TabContainer", "dijit/layout/ContentPane", "dojo/dom-construct", "dijit/form/Button", "dijit/CheckedMenuItem", "dojo/_base/array", "dgrid/Grid", "dojo/store/Memory", "dgrid/OnDemandGrid", "dgrid/extensions/ColumnResizer","dojo/dom-geometry", "dojox/layout/FloatingPane", "esri/dijit/Legend", "dojo/window", "dgrid/util/touch", "dgrid/Selection", "dgrid/extensions/ColumnHider", "esri/layers/ArcGISDynamicMapServiceLayer", "esri/layers/FeatureLayer", "dojo/io-query", "dojo/currency"],
+    function(declare, WidgetBase, TemplatedMixin, template, domStyle, domClass, baseFx, dojo, lang, on, mouse, query, Memory, ComboBox, DropDownButton, DropDownMenu, MenuItem, dom, parser, dq, registry, TabContainer, ContentPane, domConstruct, Button, CheckedMenuItem, array, Grid, Memory, OnDemandGrid, ColumnResizer, domGeom, FloatingPane, Legend, win, touchUtil, Selection, ColumnHider, ArcGISDynamicMapServiceLayer, FeatureLayer, ioQuery, localeCurrency){
         return declare([WidgetBase, TemplatedMixin], {
             // Some default values for our author
             // These typically map to whatever you're handing into the constructor
@@ -31,6 +31,8 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
             expanded: true,
             
             outputid: "",
+			
+			ft: true,
 			
             
             destroy: function(){
@@ -237,6 +239,7 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
          this.featureLayer.selectFeatures(qr,FeatureLayer.SELECTION_NEW, lang.hitch(this, this.restrictGeography));
 		}
 
+			
 		this.restrictGeography();
 			
 			  
@@ -268,10 +271,7 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 			
 		
 			  this.collapse();
-			  
-			  
-			  csbut
-			  
+			  			  
 			  cs = dom.byId("csbut");
 		
 				on(cs, "click", lang.hitch(this,this.collapse))
@@ -305,10 +305,22 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 					}))
 			  
 		   },
-		   
+		  
+		  changeinsides: function() {
+			
+			a = dijit.byId("pstuff");
+			
+			//alert(a.h);
+			
+			domStyle.set("gridloc", "height", (a.h - 170) + "px");
+			
+			this.map.resize(true)	
+			this.map.reposition()
+		  
+		  },
+		  
 		  fullscreen: function() {
 		  
-			
 			//lex = this.map.getLevel()
 		  
 			//alert(cex);
@@ -323,12 +335,15 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		  	domStyle.set("fsstuff", "top", "0px");
 			domStyle.set("fsstuff", "left", "0px");
 			domStyle.set("fsstuff", "width", (vs.w + 15) + "px");
-			domStyle.set("fsstuff", "height", vs.h + "px");
+			//domStyle.set("thebc", "width", (vs.w + 15) + "px");
+			domStyle.set("fsstuff", "height", (vs.h) + "px");
+			//domStyle.set("pstuff", "width", (vs.w + 15) + "px");
+			
 			
 			domStyle.set("container", "height", 0 + "px");
 			domStyle.set("ssloc", "height", 0 + "px");
 			
-			domStyle.set("map", "height", (vs.h - 490) + "px");
+			//domStyle.set("map", "height", (vs.h - 490) + "px");
 			
 			domStyle.set("pFloatingPane", "top", 5 + "px");
 			domStyle.set("pFloatingPane", "left", (vs.w - 285) + "px");			
@@ -336,17 +351,15 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 			domStyle.set("pFloatingPaneLeg", "top", (vs.h - 490) - 260 + "px");
 			domStyle.set("pFloatingPaneLeg", "left", 5 + "px");		
 				
-				
 
 	        this.map.resize(true)	
 			this.map.reposition()
 
 			this.inFullscreen = true;
 			
-			
-			this.map.centerAt(cex.getCenter())
+			//this.map.centerAt(cex.getCenter()).then(setTimeout(lang.hitch(this,this.fullscreen),3000));
 		
-		  
+				  
 		  
 		  },
 		  
@@ -357,12 +370,13 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		  
 		  	ss = domGeom.position("ssloc", true);
 			
+			//domStyle.set("thebc", "height",  "1010px");
 			domStyle.set("csbut", "display", "none");
-			domStyle.set("fsstuff", "width", "915px");
+			domStyle.set("fsstuff", "width", "925px");
 			domStyle.set("fsstuff", "height", "1010px");
 			domStyle.set("fsstuff", "top", ss.y + "px");
 			domStyle.set("fsstuff", "left", ss.x + "px");
-			domStyle.set("map", "height", "510px");
+			//domStyle.set("eMap", "height", "510px");
 			
 			domStyle.set("container", "height", "");
 			domStyle.set("ssloc", "height", 1010 + "px");
@@ -382,7 +396,7 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 			
 			this.map.centerAt(cex.getCenter())
 			
-		  
+					  
 		  },
 		   
 		  restrictGeography: function() {
@@ -575,8 +589,8 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 			this.grid.destroy( true ); 
 		}
          
-		node = domConstruct.toDom('<div id="gridloc" style="width:100%;height:330px"></div>')
-		domConstruct.place(node, "fsstuff", "last");
+		node = domConstruct.toDom('<div id="gridloc" style="width:98%;height:330px"></div>')
+		domConstruct.place(node, "pstuff", "last");
 		 
         // Create an instance of OnDemandGrid referencing the store
 			this.grid = new (declare([Grid, ColumnResizer, Selection, ColumnHider]))({
@@ -638,6 +652,13 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 			}));
 		
 
+			this.map.resize(true)	
+			this.map.reposition()
+			
+			if (this.ft == true) {
+			this.map.setLevel(5) //.then(setTimeout(lang.hitch(this,(function(){this.map.setLevel(5); this.map.reposition(); this.map.resize(true)}), 500)))
+			this.ft = false
+			}
 			
 			//on(this.grid, "click", function(event){
 			//	//row = grid.row(event);
@@ -652,8 +673,10 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		
 			if (f.length > 0) {
 					
-				totalf = "$" + Ext.util.Format.number(totalm, "0,000.00");	
+				//totalf = "$" + Ext.util.Format.number(totalm, "0,000.00");
 
+					totalf = localeCurrency.format(totalm, {currency: "USD"});				
+				
 					labelnode = dom.byId("statarea");
 					labelnode.innerHTML = ("Projects (" + f.length + " selected) - Total Funding " + totalf + " :" )
 				
