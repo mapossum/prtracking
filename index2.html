@@ -35,10 +35,7 @@
 	vertical-align: top;
 	}
 	
-	#borderContainer {
-    width: 100%;
-    height: 100%;
-	}
+
 	
 	div.title {
 	
@@ -90,6 +87,7 @@
 @import "http://www.imds.greenlitestaging.com/sites/all/themes/tnc/style.css?A";
 </style>    
 
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
 
 <!--
 <script type="text/javascript" src="http://www.imds.greenlitestaging.com/sites/default/files/js/js_67123a4af873a96fca50f8dd1f3ee581.js"></script>
@@ -217,14 +215,14 @@ $(document).ready(function() {$('#back-top').css('right','40px');$('#back-top .i
 	  
 	  
 	bc = new BorderContainer({
-        style: "height: 100%; width: 100%; padding:0px",
+        style: "height: 1010px; width: 922px; padding:0px",
 		id: "thebc"
     });
 
     // create a ContentPane as the left pane in the BorderContainer
     cp1 = new ContentPane({
         region: "top",
-        style: "height: 510px; padding:0px; width: 100%;",
+        style: "height: 510px; padding:0px; width: 920px;",
 		id: "eMap",
 		splitter:true
     });
@@ -233,17 +231,18 @@ $(document).ready(function() {$('#back-top').css('right','40px');$('#back-top .i
     // create a ContentPane as the center pane in the BorderContainer
     cp2 = new ContentPane({
         region: "center",
-		//style: "height: 550px; padding:0px",
-		content: "<div id='controls' style='width: 100%;height:115px;padding-top:10px'></div><div id='statarea' style='width: 100%;height:20px'></div>",
+		style: "width: 920px; padding:0px",
+		content: "<div id='controls' style='width: 920px;height:115px;padding-top:10px'></div><div id='statarea' style='width: 920px;height:20px'></div>",
 		splitter:true,
 		id: "pstuff"
 		,
 		resize: function() { 
-							 console.log(this.h)
+							 //console.log(this.h)
 							 
 							 a = dijit.byId("mainwig");
+							 //console.log(dijit.byId("thebc"))
 							 try {
-								console.log(a.grid);
+								//console.log(a.grid);
 								//domStyle.set(a.grid, "height", "400px");
 								b = lang.hitch(a,a.changeinsides)
 								b();

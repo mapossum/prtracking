@@ -335,29 +335,41 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 		  	domStyle.set("fsstuff", "top", "0px");
 			domStyle.set("fsstuff", "left", "0px");
 			domStyle.set("fsstuff", "width", (vs.w + 15) + "px");
-			//domStyle.set("thebc", "width", (vs.w + 15) + "px");
+			domStyle.set("thebc", "height", (vs.h) + "px");
 			domStyle.set("fsstuff", "height", (vs.h) + "px");
-			//domStyle.set("pstuff", "width", (vs.w + 15) + "px");
-			
+			domStyle.set("pstuff", "width", (vs.w + 10) + "px");
+			domStyle.set("statarea", "width", (vs.w + 10) + "px");
+			domStyle.set("controls", "width", (vs.w + 10) + "px");
+			domStyle.set("gridloc", "width", (vs.w) + "px");
+			domStyle.set("thebc", "width", (vs.w + 10) + "px");
 			
 			domStyle.set("container", "height", 0 + "px");
 			domStyle.set("ssloc", "height", 0 + "px");
 			
-			//domStyle.set("map", "height", (vs.h - 490) + "px");
+			domStyle.set("eMap", "width", (vs.w + 8) + "px");
 			
 			domStyle.set("pFloatingPane", "top", 5 + "px");
 			domStyle.set("pFloatingPane", "left", (vs.w - 285) + "px");			
 			
 			domStyle.set("pFloatingPaneLeg", "top", (vs.h - 490) - 260 + "px");
 			domStyle.set("pFloatingPaneLeg", "left", 5 + "px");		
-				
-
+			
+			//dijit.byId("thebc")._layoutChildren()
+			//dijit.byId("eMap").resize()
+			//dijit.byId("pstuff").resize()
+			
+			//window.resizeTo(vs.w + 1, vs.h+ 1);
+			//on.emit(window,"resize", {cancelable: true});
+		
+			//$(window).trigger('resize');
+			
+			
 	        this.map.resize(true)	
 			this.map.reposition()
 
 			this.inFullscreen = true;
 			
-			//this.map.centerAt(cex.getCenter()).then(setTimeout(lang.hitch(this,this.fullscreen),3000));
+			this.map.centerAt(cex.getCenter())
 		
 				  
 		  
@@ -376,10 +388,22 @@ define(["dojo/_base/declare","dijit/_WidgetBase", "dijit/_TemplatedMixin", "dojo
 			domStyle.set("fsstuff", "height", "1010px");
 			domStyle.set("fsstuff", "top", ss.y + "px");
 			domStyle.set("fsstuff", "left", ss.x + "px");
+			domStyle.set("thebc", "height", "1010px");
 			//domStyle.set("eMap", "height", "510px");
 			
 			domStyle.set("container", "height", "");
 			domStyle.set("ssloc", "height", 1010 + "px");
+
+			domStyle.set("pstuff", "width", "920px");
+			domStyle.set("statarea", "width", "920px");
+			domStyle.set("controls", "width", "920px");
+			
+			if (this.grid != undefined) {
+				domStyle.set("gridloc", "width", "918px"); 
+			}
+			
+			domStyle.set("thebc", "width", "922px");
+			domStyle.set("eMap", "width", "920px");
 
 			domStyle.set("pFloatingPane", "top", 5 + "px");
 			domStyle.set("pFloatingPane", "left", (ss.w - 285) + "px");			
